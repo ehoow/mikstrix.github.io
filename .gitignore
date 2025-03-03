@@ -1,0 +1,16 @@
+# Node modules (if you ever add a Node-based build process)
+node_modules/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE and editor settings
+.vscode/
+.idea/
+
+# Log files
+*.log
+
+# Cache files
+.cache/
