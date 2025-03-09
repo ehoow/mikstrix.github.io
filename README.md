@@ -1,34 +1,76 @@
 # Pokémon TCG Pocket Luck Calculator
 
-This is a fun, Pokémon-themed luck calculator for Pokémon TCG Pocket! It lets you input the number of cards you pulled for each rarity (e.g., Crown Rares, Triple Stars, etc.) along with the number of packs opened, then calculates:
+A fun, web‑based calculator for Pokémon TCG Pocket that measures how “lucky” your pack pulls are based on in‑game probabilities. The app features a retro, Pokémon‑themed design with dynamic animations and confetti effects to celebrate your pulls (or commiserate when luck isn’t on your side).
 
-- A **Raw Luck Score** for each rarity: `(Actual Pulled ÷ Expected) × 100`
-- An **Overall Luck Score** using an original summation and normalization method.
-- A matching overall description and a Pokémon image based on your final score.
-- Fun animations such as confetti for high scores and "sad confetti" for very low scores.
+---
 
 ## Features
 
-- **Responsive Input Layout:** Rarity inputs are arranged in compact cards in a grid, with a separate card for the number of packs opened.
-- **Validation:** Ensures the total number of cards pulled doesn't exceed the maximum possible (assuming 5 cards per pack).
-- **Themed Descriptions:** Unique Pokémon-themed messages for each rarity and overall score range.
-- **Animations:** Pulse or shake animation on the overall score box, with confetti effects based on your luck.
-- **Pokémon Image:** Displays an image (sourced from the official PokeAPI sprites) corresponding to your overall luck.
+- **Dynamic Luck Calculation:**  
+  Compares the actual number of cards pulled against the expected pull rates for each rarity, then computes an overall "luck" score.
 
-## How to Use
+- **Animated Results:**  
+  Enjoy animated effects – from confetti that fills the screen on high scores to a sad confetti effect on low scores, plus an animated Pokémon image that appears as your result.
 
-1. Open the `index.html` file in your browser.
-2. Enter the number of cards you pulled for each rarity.
-3. Enter the number of packs opened.
-4. Click the **Submit** button.
-5. The calculator will display your overall luck score, a detailed breakdown, and a Pokémon image and message representing your performance.
+- **Pokémon‑Inspired UI:**  
+  Uses the retro "Press Start 2P" font, animated Pokéball icons in the title, and Pokémon‑themed messages throughout.
 
-## Customization
+- **Responsive Design:**  
+  Automatically adapts for smaller screens so it looks great on phones and tablets.
 
-- **Maximum Cards per Pack:** The calculator assumes a maximum of 5 cards per pack. Adjust this in the JavaScript if needed.
-- **Image URLs:** The Pokémon images are loaded from the official PokeAPI sprites. You can update these URLs to your preferred images.
-- **Descriptions & Ranges:** Both per-rarity and overall descriptions are customizable via arrays in the JavaScript.
+- **Local Storage:**  
+  Saves your input values so you don’t have to re-enter data each time.
+
+---
+
+## Expected Pull Rates
+
+- **Crown Rares:** 0.193%
+- **Triple Stars:** 1.12%
+- **Double Stars:** 2.55%
+- **Single Stars:** 12.7%
+- **Quadruple Diamonds:** 7.32%
+- **Rare (God Pack):** 0.05%
+
+> **Note:** Cards below Quadruple Diamonds are not tracked individually; they are assumed to be pulled at an average (100%) rate for every player.
+
+---
+
+## Usage
+
+1. **Enter Your Pulls:**  
+   Input the number of cards you pulled for each rarity and the number of packs opened.
+
+2. **Submit & See Your Luck:**  
+   Click the **Submit** button to calculate your overall luck score. The app will display a breakdown by rarity along with an animated Pokémon result and confetti effects based on your performance.
+
+3. **How It Works:**  
+   The “How It Works” section explains the calculation:
+   - **Luck Factor (%)** is determined by comparing your actual pulls to the expected number, then scaling the result.
+   - A 0% Luck Factor means you pulled exactly as expected. Positive values indicate extra pulls, while negative values indicate fewer pulls.
+   - Each rarity is accompanied by a fun, Pokémon‑inspired message.
+
+---
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## Disclaimer
+
+Pokémon, the Pokémon logo, Poké Balls, and all related icons and images are trademarks of Nintendo, The Pokémon Company, and their affiliates. This project uses these assets solely for personal, educational, and non-commercial purposes and is not endorsed, sponsored, or affiliated with Nintendo or The Pokémon Company.
+
+---
+
+## Attributions
+
+- **Pokémon Sprites & Icons:**  
+  Obtained from [PokeAPI](https://pokeapi.co/) and used in accordance with their usage guidelines.
+- **Web Font:**  
+  "Press Start 2P" is provided by [Google Fonts](https://fonts.google.com/).
+
+---
+
+Feel free to fork, contribute, or suggest improvements!
