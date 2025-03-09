@@ -5,12 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="Calculate your luck in Pokémon TCG Pocket!"/>
   <title>Pokémon TCG Pocket Luck Calculator</title>
-  <!-- Pokémon-inspired font -->
+  <!-- Using Press Start 2P for a retro, Pokémon-inspired vibe -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
-    /* Overall background with a subtle gradient */
+    /* Background decal: subtle repeating Pokéball pattern */
+    .bg-decal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/5/53/Pokeball.png') repeat;
+      opacity: 0.05;
+      z-index: -1;
+    }
+    /* Overall styling with a Pokémon TCG vibe */
     body {
-      font-family: 'Trebuchet MS', sans-serif;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 14px;
       margin: 0;
       background: linear-gradient(135deg, #90CAF9, #F48FB1);
       display: flex;
@@ -19,52 +31,87 @@
       min-height: 100vh;
       padding: 20px;
       overflow-x: hidden;
+      position: relative;
     }
+    /* Floating Pokémon decorations with continuous movement */
+    @keyframes floatAround {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(30px, -20px); }
+      50% { transform: translate(-20px, 30px); }
+      75% { transform: translate(10px, -10px); }
+      100% { transform: translate(0, 0); }
+    }
+    .floating-pokemon {
+      position: fixed;
+      z-index: 0; /* in the background */
+      animation: floatAround 20s ease-in-out infinite;
+    }
+    .floating-pokemon.top-left { top: 10px; left: 10px; width: 60px; }
+    .floating-pokemon.top-right { top: 10px; right: 10px; width: 60px; }
+    .floating-pokemon.bottom-right { bottom: 10px; right: 10px; width: 60px; }
+    .floating-pokemon.bottom-left { bottom: 10px; left: 10px; width: 60px; }
+    .floating-pokemon img { width: 100%; height: auto; }
+    /* Container with a placeholder Pokémon card texture background */
     .container {
       width: 100%;
       max-width: 600px;
       background-color: #FFF9C4;
       padding: 20px;
       border-radius: 15px;
-      box-shadow: 0px 6px 10px rgba(0,0,0,0.2);
       border: 3px solid #FFCA28;
+      box-shadow: 0 6px 10px rgba(0,0,0,0.2);
       position: relative;
+      background-image: url('https://via.placeholder.com/600x400?text=Pok%C3%A9mon+Card+Texture');
+      background-size: cover;
+      background-position: center;
       z-index: 1;
     }
-    /* Title styling */
+    /* Header image using a placeholder image that reliably displays text */
+    .header-image {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .header-image img {
+      width: 200px;
+      height: auto;
+    }
     h1 {
       text-align: center;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 2em;
+      font-size: 1.5em;
       margin-bottom: 20px;
       color: #3E2723;
       text-shadow: 2px 2px 0 #FFF, 4px 4px 0 #FFEB3B;
     }
-    .section {
-      margin-bottom: 20px;
-    }
-    /* Grid layout for rarity cards */
+    .section { margin-bottom: 20px; }
+    /* Rarity cards grid with sequential fadeInUp animation */
     .rarity-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 15px;
       margin-bottom: 20px;
     }
-    .card {
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .rarity-grid .card {
       background: #FFEBCD;
       border: 2px solid #FFCA28;
       border-radius: 10px;
       padding: 10px;
       text-align: center;
-      transition: transform 0.2s, box-shadow 0.2s;
+      opacity: 0;
+      animation: fadeInUp 0.5s ease forwards;
     }
-    .card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
+    .rarity-grid .card:nth-child(1) { animation-delay: 0.2s; }
+    .rarity-grid .card:nth-child(2) { animation-delay: 0.4s; }
+    .rarity-grid .card:nth-child(3) { animation-delay: 0.6s; }
+    .rarity-grid .card:nth-child(4) { animation-delay: 0.8s; }
+    .rarity-grid .card:nth-child(5) { animation-delay: 1s; }
+    .rarity-grid .card:nth-child(6) { animation-delay: 1.2s; }
     .card label {
+      font-size: 1em;
       display: block;
-      font-size: 0.9em;
       margin-bottom: 5px;
       color: #424242;
     }
@@ -72,7 +119,7 @@
     .packs-card input {
       width: 60px;
       padding: 5px;
-      font-size: 0.9em;
+      font-size: 1.1em;
       border: 1px solid #FFCA28;
       border-radius: 5px;
       text-align: center;
@@ -85,7 +132,6 @@
       outline: none;
       transform: scale(1.1);
     }
-    /* Packs opened card */
     .packs-card {
       background: #FFEBCD;
       border: 2px solid #FFCA28;
@@ -101,14 +147,14 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     .packs-card label {
+      font-size: 0.8em;
       display: block;
-      font-size: 0.9em;
       margin-bottom: 5px;
       color: #424242;
     }
     .button {
       padding: 12px 20px;
-      font-size: 1.1em;
+      font-size: 0.9em;
       font-weight: bold;
       background-color: #D32F2F;
       color: white;
@@ -121,17 +167,10 @@
       margin-left: auto;
       margin-right: auto;
     }
-    .button:hover {
-      background-color: #B71C1C;
-    }
-    .result {
-      margin-top: 10px;
-      font-size: 1em;
-      color: #424242;
-    }
-    /* Overall score styling */
+    .button:hover { background-color: #B71C1C; }
+    .result { margin-top: 10px; font-size: 0.8em; color: #424242; }
     .score-highlight {
-      font-size: 1.8em;
+      font-size: 1.4em;
       font-weight: bold;
       padding: 15px;
       border: 3px solid #D32F2F;
@@ -142,45 +181,58 @@
       transition: transform 0.4s;
     }
     .section h2 {
+      font-size: 1.2em;
       color: #D32F2F;
       text-shadow: 1px 1px 0 #FFF;
       margin-bottom: 10px;
     }
-    /* List styling for per-rarity breakdown */
-    ul {
-      list-style: none;
-      padding: 0;
+    ul { list-style: none; padding: 0; }
+    /* Formatting for Luck Score by Rarity results – slower animation */
+    @keyframes fadeInUpSlow {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    ul li {
+    #luckByRarity li {
       background: #FFFDE7;
       margin-bottom: 10px;
       padding: 10px;
       border: 2px dashed #FFCA28;
       border-radius: 8px;
+      font-size: 0.8em;
+      opacity: 0;
+      animation: fadeInUpSlow 0.8s ease forwards;
     }
-    ul li em {
-      color: #1976D2;
+    /* Increase delays for slower reveal */
+    #luckByRarity li:nth-child(1) { animation-delay: 1s; }
+    #luckByRarity li:nth-child(2) { animation-delay: 2s; }
+    #luckByRarity li:nth-child(3) { animation-delay: 3s; }
+    #luckByRarity li:nth-child(4) { animation-delay: 4s; }
+    #luckByRarity li:nth-child(5) { animation-delay: 5s; }
+    #luckByRarity li:nth-child(6) { animation-delay: 6s; }
+    /* Styled span for score numbers in red */
+    .score-number {
+      font-weight: bold;
+      color: red;
+      margin: 0 3px;
     }
     .mascot {
       text-align: center;
-      font-size: 1.4em;
+      font-size: 1.2em;
       margin-top: 10px;
       font-weight: bold;
       color: #3E2723;
     }
-    /* Pokémon image section for overall luck */
     .pokemon-image {
       text-align: center;
       margin-top: 15px;
     }
     .pokemon-image img {
-      width: 120px;
+      width: 100px;
       height: auto;
       border: 2px solid #D32F2F;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
-    /* Confetti styling */
     .confetti {
       position: fixed;
       top: 0;
@@ -191,14 +243,11 @@
       pointer-events: none;
       border-radius: 2px;
     }
-    /* Animations */
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.05); }
     }
-    .pulse {
-      animation: pulse 1s infinite;
-    }
+    .pulse { animation: pulse 1s infinite; }
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       20% { transform: translateX(-5px); }
@@ -206,16 +255,47 @@
       60% { transform: translateX(-5px); }
       80% { transform: translateX(5px); }
     }
-    .shake {
-      animation: shake 0.6s;
+    .shake { animation: shake 0.6s; }
+    /* Hide the results section initially */
+    #resultsSection { display: none; }
+    /* Collapsible How It Works (starts collapsed) */
+    details {
+      font-size: 0.8em;
+      color: #3E2723;
+      background: #FFFDE7;
+      border: 2px dashed #FFCA28;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 10px;
     }
+    details summary { cursor: pointer; font-weight: bold; }
   </style>
 </head>
 <body>
+  <!-- Background decal -->
+  <div class="bg-decal"></div>
+  <!-- Floating Pokémon decorations -->
+  <div class="floating-pokemon top-left">
+    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pikachu">
+  </div>
+  <div class="floating-pokemon top-right">
+    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png" alt="Charmander">
+  </div>
+  <div class="floating-pokemon bottom-right">
+    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png" alt="Mewtwo">
+  </div>
+  <div class="floating-pokemon bottom-left">
+    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png" alt="Bulbasaur">
+  </div>
+
   <div class="container">
+    <!-- Header image using a placeholder from via.placeholder.com -->
+    <div class="header-image">
+      <img src="https://via.placeholder.com/200x80?text=Pokemon+TCG" alt="Pokemon TCG Logo">
+    </div>
     <h1>Pokémon TCG Pocket Luck Calculator</h1>
 
-    <!-- Rarity inputs (using emoji symbols) -->
+    <!-- Rarity Inputs (using emoji labels) -->
     <div class="rarity-grid section">
       <div class="card">
         <label>👑 Crown Rares</label>
@@ -243,7 +323,7 @@
       </div>
     </div>
 
-    <!-- Packs opened -->
+    <!-- Packs Opened -->
     <div class="packs-card section">
       <label>Packs Opened</label>
       <input type="number" id="packsOpened" min="0" class="luck-input" />
@@ -252,43 +332,53 @@
     <button class="button" id="submitButton">Submit</button>
     <div id="errorHandling" class="result"></div>
 
-    <!-- Overall Luck Score -->
-    <div class="section">
-      <h2>Your Overall Luck Score:</h2>
-      <div id="scoreBox" class="score-highlight"></div>
-      <div id="luckRating" class="mascot"></div>
-      <div id="pokemonImage" class="pokemon-image"></div>
+    <!-- Results Section (hidden until Submit is pressed) -->
+    <div id="resultsSection">
+      <!-- Overall Luck Score Section -->
+      <div class="section">
+        <h2>Your Overall Luck Score:</h2>
+        <div id="scoreBox" class="score-highlight"></div>
+        <div id="luckRating" class="mascot"></div>
+        <div id="pokemonImage" class="pokemon-image"></div>
+      </div>
+      <!-- Luck by Rarity Section -->
+      <div class="section">
+        <h2>Luck Score by Rarity:</h2>
+        <div id="luckByRarity" class="result"></div>
+      </div>
     </div>
 
-    <!-- Luck by Rarity -->
-    <div class="section">
-      <h2>Luck Score by Rarity:</h2>
-      <div id="luckByRarity" class="result"></div>
-    </div>
-
-    <!-- Explanation -->
-    <div class="section">
-      <h2>How It Works:</h2>
+    <!-- Collapsible How It Works Section (starts collapsed) -->
+    <details>
+      <summary>How It Works</summary>
       <p>
-        For each rarity, we compare the <em>actual</em> number of cards pulled to the <em>expected</em> amount.
-        We then display a <strong>Luck Factor</strong> in a technical format:
-        <em>“You pulled 25% more than expected.”</em> or <em>“You pulled 10% fewer than expected.”</em>
-        If no cards are pulled for a rarity, a unique message is shown.
+        The calculator determines your luck by comparing the actual number of cards pulled for each rarity against the expected values (derived from in‐game pull rates). For each rarity, the Luck Factor is calculated as:
+      </p>
+      <ul>
+        <li><strong>Luck Factor (%) = (Actual ÷ Expected) × 100 - 100</strong></li>
+      </ul>
+      <p>
+        A 0% Luck Factor means you pulled exactly as expected. Positive values indicate extra pulls, while negative values indicate fewer pulls. Each rarity displays a Pokémon‑inspired message – and if you pull zero cards in a tier, a unique message is shown.
       </p>
       <p>
-        These individual differences are combined to produce an overall Luck Score (0–100).
-        Based on your final score, one of several Pokémon—with its own description—is randomly selected to represent your pull.
+        <strong>Note on Diamonds:</strong> Cards below Quad Diamonds are not tracked individually; they are assumed to be pulled at an average (100%) rate for every player.
       </p>
-      <p>
-        <strong>Note on Diamond Rarities:</strong> In Pokémon TCG Pocket, only Quad Diamonds (♦♦♦♦) are tracked.
-        Lower diamond rarities are grouped with the other star rarities.
-      </p>
-    </div>
+    </details>
   </div>
 
   <script>
-    // Navigate inputs with Enter key
+    // LocalStorage IDs for saving inputs
+    const inputIds = ['crCards', '3sCards', '2sCards', '1sCards', '4dCards', 'rareCards', 'packsOpened'];
+
+    // Load saved inputs on DOMContentLoaded
     document.addEventListener("DOMContentLoaded", function() {
+      inputIds.forEach(id => {
+        const savedValue = localStorage.getItem(id);
+        if (savedValue !== null) {
+          document.getElementById(id).value = savedValue;
+        }
+      });
+      // Enable navigation with the Enter key
       const inputs = document.querySelectorAll('.luck-input');
       inputs.forEach((input, index, arr) => {
         input.addEventListener('keydown', function(e) {
@@ -305,86 +395,94 @@
       });
     });
 
-    /* Expanded Individual Rarity Descriptions – Technical Ranges */
+    // Save inputs to localStorage
+    function saveInputs() {
+      inputIds.forEach(id => {
+        const value = document.getElementById(id).value;
+        localStorage.setItem(id, value);
+      });
+    }
+
+    /* Expanded Individual Rarity Descriptions in Pokémon Style */
     const rarityDescriptionsOriginal = {
       ">=150": [
-        "Exceptional performance – you pulled 50% more than expected.",
-        "Phenomenal result – far exceeding statistical predictions.",
-        "Outstanding – your pull is extraordinary."
+        "Legendary pull! Like snagging a shiny Mewtwo – a 50% bonus over the norm.",
+        "Mythic result – as if you caught Arceus on a once-in-a-lifetime day.",
+        "Inconceivable – your pull redefines rarity, a feat worthy of legends."
       ],
       ">=130": [
-        "Very strong performance – you pulled around 30% more than expected.",
-        "Remarkable – significantly above the statistical norm.",
-        "Impressive – a substantial positive deviation."
+        "Excellent pull – roughly 30% above expectation, like landing a secret Mega Evolution.",
+        "Stellar performance – reminiscent of a rare Charizard moment.",
+        "Very strong – your pull exceeds odds, a standout achievement."
       ],
       ">=110": [
-        "Slightly above average – roughly 10% more than expected.",
-        "Good – modestly exceeding expectations.",
-        "Solid – a small but positive variance."
+        "Above average – about 10% extra; a solid pull like an Eevee evolving at the right time.",
+        "Good pull – slightly exceeding expectations, like a Jolteon striking fast.",
+        "Positive variance – a modest boost over the norm."
       ],
       ">=90": [
-        "As expected – your results match probability closely.",
-        "On target – statistically average pull.",
-        "Exactly as predicted by chance."
+        "Average – your pull matches expected odds, as steady as a Bulbasaur.",
+        "On target – results align perfectly with probability.",
+        "Standard – a typical pull that meets statistical predictions."
       ],
       ">=75": [
-        "Slightly below average – about 25% fewer than expected.",
-        "Underperforming – a minor negative variance.",
-        "Marginally disappointing – below statistical expectation."
+        "Slightly under – around 25% fewer than expected; like a Caterpie yet to evolve.",
+        "Underperforming – a modest deficit, as if a Weedle couldn’t reach its potential.",
+        "Mildly disappointing – just a bit below the expected yield."
       ],
       ">=60": [
-        "Below average – approximately 40% fewer than expected.",
-        "Subpar result – noticeably underperforming.",
-        "Significantly below expectation – not a great pull."
+        "Below average – about 40% fewer; a pull as unremarkable as a Magikarp’s splash.",
+        "Subpar – noticeably under the odds, like a Pidgey lost in the wind.",
+        "Poor result – clearly below statistical expectations."
       ],
       ">=45": [
-        "Poor performance – dramatically less than expected.",
-        "Substantially underwhelming – major deviation from norms.",
-        "Considerably disappointing – far below statistical predictions."
+        "Very poor – dramatically fewer than expected; a result as dismal as a Slowpoke in a sprint.",
+        "Disastrous – far below what chance predicts, like a Koffing running out of gas.",
+        "Critically low – a severe miss against the odds."
       ],
       ">=25": [
-        "Very poor – extremely unlikely outcome, far below expectation.",
-        "Almost no luck – a stark contrast to probability.",
-        "Disastrous – a result that defies statistical odds."
+        "Extremely low – nearly catastrophic; as if a Spearow was overshadowed by giants.",
+        "Abysmal – a pull that defies probability, like a Magmar’s flame sputtering.",
+        "Utter failure – an outcome that leaves nothing to chance."
       ],
       "else": [
-        "No luck at all – a complete absence where some were expected.",
-        "Utter failure – a result well below any statistical probability.",
-        "A total miss – no positive outcomes detected."
+        "No luck at all – a complete absence, where even Magikarp only splashes.",
+        "Absolute bust – an outcome missing every expectation.",
+        "Total failure – no positive pulls detected."
       ]
     };
 
     /* Unique Zero-Pull Descriptions for each rarity */
     const zeroRarityDescriptions = {
       "👑 Crown Rare": [
-        "No Crown Rares pulled – the pinnacle remained elusive.",
-        "Zero Crown Rares – even legends have off days.",
+        "No Crown Rares – even legends have off days.",
+        "Zero Crown Rares – the pinnacle remained elusive.",
         "No Crown Rares – the highest tier slipped by."
       ],
       "⭐⭐⭐ Triple Star": [
-        "No Triple Stars pulled – the brilliance did not shine today.",
-        "Zero Triple Stars – a near miss in a rare category.",
-        "No Triple Stars – the odds were against you."
+        "No Triple Stars – the brilliance did not shine today.",
+        "Zero Triple Stars – a rare miss in this luminous category.",
+        "No Triple Stars – the spark of rarity was missing."
       ],
       "⭐⭐ Double Star": [
-        "No Double Stars pulled – a disappointing absence.",
-        "Zero Double Stars – the numbers just didn’t add up.",
+        "No Double Stars – a disappointing void in this key tier.",
+        "Zero Double Stars – the usual shine was absent.",
         "No Double Stars – a gap in your collection."
       ],
       "⭐ Single Star": [
-        "No Single Stars pulled – even the common ones hid from you.",
-        "Zero Single Stars – a surprising void.",
-        "No Single Stars – an unexpected miss."
+        "No Single Stars – even the common ones hid away.",
+        "Zero Single Stars – a surprising void at the base level.",
+        "No Single Stars – an unexpected miss in everyday pulls."
       ],
       "♦♦♦♦ Quadruple Diamond": [
-        "No Quad Diamonds pulled – the sparkle was missing.",
-        "Zero Quad Diamonds – the gems remained uncollected.",
-        "No Quad Diamonds – luck did not shine here."
+        "No Quad Diamonds – the gems failed to sparkle.",
+        "Zero Quad Diamonds – the rare jewels were nowhere to be found.",
+        "No Quad Diamonds – the shine of perfection was absent."
       ],
       "Rare (God Pack)": [
-        "No Rare Pack cards pulled – the jackpot eluded you.",
-        "Zero Rare Pack cards – the ultimate rarity was absent.",
-        "No Rare Pack cards – the gods were silent."
+        "No Rare Pack cards – the ultimate rarity was completely missed.",
+        "Zero Rare Pack cards – the jackpot remained locked.",
+        "No Rare Pack cards – the gods of rarity were silent."
       ]
     };
 
@@ -403,7 +501,6 @@
       const luckScore = parseFloat(score);
       if (isNaN(luckScore)) return "";
       if (luckScore === 0 && zeroRarityDescriptions[rarityKey]) {
-        // Use the unique zero-pull description
         const arr = zeroRarityDescriptions[rarityKey];
         const index = Math.floor(Math.random() * arr.length);
         return arr[index];
@@ -419,32 +516,32 @@
       else return pickUniqueDescription("else");
     }
 
-    // Overall brackets: each with 3 Pokémon options (description + image)
+    /* Overall Luck Brackets – 6 Brackets with 3 Pokémon options each */
     const overallBrackets = {
       ">=80": [
         { description: "Unstoppable – like Mewtwo at full power!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png", alt: "Mewtwo" },
-        { description: "Legendary – like Lugia reigning supreme!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/249.png", alt: "Lugia" },
-        { description: "Phenomenal – like Rayquaza soaring the skies!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png", alt: "Rayquaza" }
+        { description: "Legendary – as if you summoned Lugia on your best day!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/249.png", alt: "Lugia" },
+        { description: "Mythical – akin to witnessing Rayquaza rule the skies!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png", alt: "Rayquaza" }
       ],
       ">=65": [
-        { description: "Impressive – like Charizard blazing the field!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png", alt: "Charizard" },
-        { description: "Formidable – like Tyranitar dominating the arena!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/248.png", alt: "Tyranitar" },
-        { description: "Strong – like Salamence in full flight!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/373.png", alt: "Salamence" }
+        { description: "Impressive – like Charizard blazing a trail in battle!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png", alt: "Charizard" },
+        { description: "Formidable – as if Tyranitar dominated the arena!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/248.png", alt: "Tyranitar" },
+        { description: "Powerful – like Salamence soaring in a storm!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/373.png", alt: "Salamence" }
       ],
       ">=50": [
-        { description: "Steady – like Onix holding the fort!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/95.png", alt: "Onix" },
-        { description: "Reliable – like Snorlax absorbing any challenge!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/143.png", alt: "Snorlax" },
-        { description: "Solid – like Golem standing unyielding!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/76.png", alt: "Golem" }
+        { description: "Steady – like Onix holding strong as a fortress.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/95.png", alt: "Onix" },
+        { description: "Reliable – like Snorlax, a titan of persistence.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/143.png", alt: "Snorlax" },
+        { description: "Solid – like Golem, unyielding against all odds.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/76.png", alt: "Golem" }
       ],
       ">=35": [
-        { description: "Moderate – like Pikachu with a slight shortfall.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png", alt: "Pikachu" },
-        { description: "Average – like Raichu just missing the mark.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/26.png", alt: "Raichu" },
-        { description: "Room for improvement – like Jolteon needing a spark.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/135.png", alt: "Jolteon" }
+        { description: "Moderate – like Pikachu with a slight spark missing.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png", alt: "Pikachu" },
+        { description: "Average – like Raichu just short of a full charge.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/26.png", alt: "Raichu" },
+        { description: "Room for improvement – like Jolteon needing an extra jolt.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/135.png", alt: "Jolteon" }
       ],
       ">=20": [
-        { description: "Underperforming – like Rattata barely making an appearance.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/19.png", alt: "Rattata" },
-        { description: "Disappointing – like Pichu failing to spark.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/172.png", alt: "Pichu" },
-        { description: "Lackluster – like Sentret lost in the crowd.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/161.png", alt: "Sentret" }
+        { description: "Underperforming – like Rattata barely scurrying by.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/19.png", alt: "Rattata" },
+        { description: "Disappointing – like Pichu that just can’t spark.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/172.png", alt: "Pichu" },
+        { description: "Lackluster – like Sentret lost in the tall grass.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/161.png", alt: "Sentret" }
       ],
       "else": [
         { description: "Abysmal – like Magikarp with no splash at all!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/129.png", alt: "Magikarp" },
@@ -467,71 +564,61 @@
       return options[Math.floor(Math.random() * options.length)];
     }
 
-    // Technical Luck Factor text
+    // Technical Luck Factor text with styled numbers
     function getLuckFactorWording(luckFactor) {
       if (luckFactor > 0) {
-        return `You pulled ${luckFactor.toFixed(0)}% more than expected.`;
+        return `You pulled <span class="score-number">${luckFactor.toFixed(0)}%</span> more than expected.`;
       } else if (luckFactor < 0) {
-        return `You pulled ${Math.abs(luckFactor).toFixed(0)}% fewer than expected.`;
+        return `You pulled <span class="score-number">${Math.abs(luckFactor).toFixed(0)}%</span> fewer than expected.`;
       } else {
         return `Exactly on the mark (as expected).`;
       }
     }
 
-    // Confetti functions (unchanged)
-    function launchConfetti() {
-      const colors = ["#f44336", "#e91e63", "#9c27b0", "#2196f3", "#03a9f4", "#00bcd4", "#4caf50", "#ffeb3b", "#ffc107", "#ff5722"];
-      const numConfetti = 60;
-      for (let i = 0; i < numConfetti; i++) {
-        const confetto = document.createElement("div");
-        confetto.classList.add("confetti");
-        document.body.appendChild(confetto);
-        const size = Math.floor(Math.random() * 8) + 8;
-        confetto.style.width = size + "px";
-        confetto.style.height = size + "px";
-        confetto.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        confetto.style.left = Math.random() * window.innerWidth + "px";
-        confetto.style.top = "-20px";
-        const fallDuration = Math.random() * 3 + 2;
-        confetto.style.transition = `top ${fallDuration}s linear, opacity 2s ease-in`;
-        const drift = (Math.random() - 0.5) * 100;
-        confetto.style.transform = `translateX(${drift}px) rotate(${Math.random() * 360}deg)`;
-        requestAnimationFrame(() => {
-          confetto.style.top = window.innerHeight + 40 + "px";
-          confetto.style.opacity = 0;
-        });
+    // Spawn a floating Pokémon sprite for a given rarity (background; moves continuously)
+    function spawnRaritySprite(rarity) {
+      if (!raritySprites[rarity]) return;
+      const img = document.createElement("img");
+      img.src = raritySprites[rarity];
+      img.alt = rarity;
+      img.style.position = "fixed";
+      img.style.width = "50px";
+      img.style.zIndex = "0";
+      img.style.opacity = 0;
+      img.style.transition = "opacity 1s ease, transform 1s ease";
+      // Random initial position (with padding)
+      const padding = 50;
+      const left = Math.random() * (window.innerWidth - padding * 2) + padding;
+      const top = Math.random() * (window.innerHeight - padding * 2) + padding;
+      img.style.left = left + "px";
+      img.style.top = top + "px";
+      document.body.appendChild(img);
+      // Animate in: fade in and scale up
+      setTimeout(() => {
+        img.style.opacity = 1;
+        img.style.transform = "scale(1.2) rotate(15deg)";
+      }, 100);
+      // Then continuously move (via CSS animation) by adding a class
+      img.classList.add("floating-animation");
+      // After 6 seconds, remove the image
+      setTimeout(() => {
+        img.style.opacity = 0;
+        img.style.transform = "scale(0.5) rotate(-15deg)";
         setTimeout(() => {
-          if (confetto.parentNode) confetto.parentNode.removeChild(confetto);
-        }, (fallDuration + 2) * 1000);
-      }
+          if (img.parentNode) img.parentNode.removeChild(img);
+        }, 1000);
+      }, 6000);
     }
 
-    function launchSadConfetti() {
-      const colors = ["#555", "#444", "#333", "#222", "#666", "#777"];
-      const numDrops = 40;
-      for (let i = 0; i < numDrops; i++) {
-        const drop = document.createElement("div");
-        drop.classList.add("confetti");
-        document.body.appendChild(drop);
-        const size = Math.floor(Math.random() * 6) + 6;
-        drop.style.width = size + "px";
-        drop.style.height = size + "px";
-        drop.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        drop.style.left = Math.random() * window.innerWidth + "px";
-        drop.style.top = "-20px";
-        const fallDuration = Math.random() * 2 + 2;
-        drop.style.transition = `top ${fallDuration}s linear, opacity 2s ease-in`;
-        const drift = (Math.random() - 0.5) * 80;
-        drop.style.transform = `translateX(${drift}px) rotate(${Math.random() * 360}deg)`;
-        requestAnimationFrame(() => {
-          drop.style.top = window.innerHeight + 40 + "px";
-          drop.style.opacity = 0.2;
-        });
-        setTimeout(() => {
-          if (drop.parentNode) drop.parentNode.removeChild(drop);
-        }, (fallDuration + 2) * 1000);
-      }
-    }
+    // Mapping rarities to a Pokémon sprite for floating decoration
+    const raritySprites = {
+      "👑 Crown Rare": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png",      // Mewtwo
+      "⭐⭐⭐ Triple Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png",         // Charizard
+      "⭐⭐ Double Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",         // Pikachu
+      "⭐ Single Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",           // Bulbasaur
+      "♦♦♦♦ Quadruple Diamond": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/249.png", // Lugia
+      "Rare (God Pack)": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png"         // Rayquaza
+    };
 
     // Calculation Logic
     function calculateAllLuck() {
@@ -540,7 +627,6 @@
         document.getElementById('errorHandling').innerHTML = 'Please enter a valid number of opened packs.';
         return;
       }
-
       const totalCardsPulled =
         (parseInt(document.getElementById('crCards').value) || 0) +
         (parseInt(document.getElementById('3sCards').value) || 0) +
@@ -548,17 +634,16 @@
         (parseInt(document.getElementById('1sCards').value) || 0) +
         (parseInt(document.getElementById('4dCards').value) || 0) +
         (parseInt(document.getElementById('rareCards').value) || 0);
-
       if (totalCardsPulled > packsOpened * 5) {
-        document.getElementById('errorHandling').innerHTML = 
+        document.getElementById('errorHandling').innerHTML =
           `Input Error: You pulled ${totalCardsPulled} cards from ${packsOpened} pack(s), but the maximum possible is ${packsOpened * 5}. Check your inputs.`;
         return;
       }
       document.getElementById('errorHandling').innerHTML = '';
-
-      // Reset descriptions for uniqueness
+      // Reset the rarity descriptions for unique messages
       rarityDescriptions = JSON.parse(JSON.stringify(rarityDescriptionsOriginal));
       calculateScore();
+      saveInputs();
     }
 
     function calculateScore() {
@@ -583,6 +668,8 @@
       let resultsHTML = "<ul>";
       let totalLuck = 0;
       const packsOpened = parseInt(document.getElementById('packsOpened').value);
+      // To ensure only one floating sprite per rarity:
+      const spawnedRarities = {};
 
       for (let rarity in pulls) {
         let actual = pulls[rarity];
@@ -605,14 +692,18 @@
             let difference = actual - expected;
             let ratio = difference / expected;
             totalLuck += ratio * 100;
+            // Spawn a floating sprite if not already spawned for this rarity
+            if (!spawnedRarities[rarity]) {
+              spawnRaritySprite(rarity);
+              spawnedRarities[rarity] = true;
+            }
           }
         } else {
           luckDisplay = "N/A";
         }
-
         resultsHTML += `
           <li>
-            <strong>${rarity}:</strong> Actual: ${actual}, Expected: ${expected.toFixed(2)}<br>
+            <strong>${rarity}:</strong> Actual: <span class="score-number">${actual}</span>, Expected: <span class="score-number">${expected.toFixed(1)}</span><br>
             <strong>Luck Factor:</strong> ${luckDisplay}<br>
             <em>${desc}</em>
           </li>`;
@@ -620,24 +711,26 @@
       resultsHTML += "</ul>";
       document.getElementById('luckByRarity').innerHTML = resultsHTML;
 
-      // Normalize overall luck score to 0–100
+      // Normalize overall luck to a score between 0 and 100
       let normalizedScore = ((totalLuck + 600) / 1200) * 100;
       normalizedScore = Math.min(Math.max(normalizedScore, 0), 100);
       let finalScore = normalizedScore.toFixed(0);
       const scoreBox = document.getElementById('scoreBox');
-      scoreBox.innerHTML = `Overall Luck Score: ${finalScore}/100`;
+      scoreBox.innerHTML = `Overall Luck Score: <span class="score-number">${finalScore}</span>/100`;
       scoreBox.classList.remove('pulse', 'shake');
       if (finalScore >= 80) scoreBox.classList.add('pulse');
       else if (finalScore < 35) scoreBox.classList.add('shake');
 
-      // Use overall bracket for description & Pokémon
+      // Overall result using overall bracket
       const overall = getOverallBracket(finalScore);
       document.getElementById('luckRating').innerHTML = overall.description;
       document.getElementById('pokemonImage').innerHTML = `<img src="${overall.image}" alt="${overall.alt}" title="${overall.alt}" />`;
 
-      // Launch confetti
-      if (finalScore >= 80) launchConfetti();
-      else if (finalScore < 35) launchSadConfetti();
+      // Reveal the results section
+      document.getElementById('resultsSection').style.display = "block";
+
+      if (finalScore >= 80) { launchConfetti(); }
+      else if (finalScore < 35) { launchSadConfetti(); }
     }
 
     document.getElementById('submitButton').addEventListener('click', calculateAllLuck);
