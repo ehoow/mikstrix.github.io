@@ -47,7 +47,7 @@
     .floating-pokemon {
       position: fixed;
       z-index: 0;
-      /* Default duration will be overridden by JS */
+      /* Duration randomized by JS (8s to 15s) */
       animation: floatAround 20s ease-in-out infinite;
     }
     .floating-pokemon.top-left { top: 10px; left: 10px; width: 60px; }
@@ -101,9 +101,15 @@
       text-shadow: 2px 2px 0 #FFF, 4px 4px 0 #FFEB3B;
       text-align: center;
     }
+    /* Intro heading styling */
     .intro {
-      text-align: center;
+      background: rgba(255,255,255,0.8);
+      padding: 10px 15px;
+      border: 2px dashed #FFCA28;
+      border-radius: 10px;
+      margin-top: 10px;
       margin-bottom: 20px;
+      text-align: center;
       font-size: 1em;
       color: #3E2723;
     }
@@ -140,13 +146,12 @@
       margin-bottom: 5px;
       color: #424242;
     }
-    /* Quad Diamonds: add icon (reverted to original PokeAPI image) with increased size */
-    .diamond-icon {
-      width: 32px;
-      vertical-align: middle;
-      margin-right: 5px;
+    /* Quadruple Diamonds: use text-based icon */
+    .quad-diamonds-label {
+      font-size: 1em;
+      color: #424242;
     }
-    /* Rare Packs: increase icon size significantly */
+    /* Rare Packs: increase icon size */
     .rare-label img {
       width: 40px;
       vertical-align: middle;
@@ -241,7 +246,7 @@
       opacity: 0;
       animation: slamIn 0.8s ease forwards;
     }
-    /* Staggered delays */
+    /* Staggered delays for results */
     #luckByRarity li:nth-child(1) { animation-delay: 1s; }
     #luckByRarity li:nth-child(2) { animation-delay: 2s; }
     #luckByRarity li:nth-child(3) { animation-delay: 3s; }
@@ -310,9 +315,7 @@
       line-height: 1.4;
     }
     /* Ensure the formula uses the same font */
-    .formula {
-      font-family: 'Press Start 2P', cursive;
-    }
+    .formula { font-family: 'Press Start 2P', cursive; }
     /* Responsive layout for smaller screens */
     @media (max-width: 600px) {
       .container { width: 100%; padding: 10px; }
@@ -348,7 +351,7 @@
         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Pokéball Icon">
       </div>
       <div class="intro">
-        Enter your card pull numbers and packs opened to see how lucky your pulls are!
+        Enter your card pull numbers and the number of packs opened to discover how lucky your pulls are!
       </div>
     </div>
 
@@ -371,10 +374,7 @@
         <input type="number" id="1sCards" min="0" class="luck-input" />
       </div>
       <div class="card">
-        <label>
-          <img class="diamond-icon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/249.png" alt="Diamond Icon">
-          Quad Diamonds
-        </label>
+        <label class="quad-diamonds-label">♦♦♦♦ Quad Diamonds</label>
         <input type="number" id="4dCards" min="0" class="luck-input" />
       </div>
       <div class="card">
@@ -465,10 +465,10 @@
           }
         });
       });
-      // Randomize animation durations for floating Pokémon
+      // Randomize animation durations for floating Pokémon (between 8s and 15s)
       const floatingElements = document.querySelectorAll('.floating-pokemon');
       floatingElements.forEach(el => {
-        const duration = Math.floor(Math.random() * 10) + 15; // random duration between 15s and 25s
+        const duration = Math.floor(Math.random() * 8) + 8; // 8s to 15s
         el.style.animationDuration = duration + 's';
       });
     });
@@ -682,8 +682,9 @@
       const randomKey = keys[Math.floor(Math.random() * keys.length)];
       spawnRaritySprite(randomKey);
     }
-    setInterval(spawnRandomBackgroundPokemon, 5000);
-    // Confetti functions
+    // Spawn floating Pokémon more frequently (every 2 seconds)
+    setInterval(spawnRandomBackgroundPokemon, 2000);
+    // Confetti functions: longer duration and more pieces
     function launchConfetti() {
       const colors = ["#f44336", "#e91e63", "#9c27b0", "#2196f3", "#03a9f4", "#00bcd4", "#4caf50", "#ffeb3b", "#ffc107", "#ff5722"];
       const numPieces = 100;
@@ -697,7 +698,7 @@
         confetto.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         confetto.style.left = Math.random() * window.innerWidth + "px";
         confetto.style.top = "-20px";
-        const fallDuration = Math.random() * 4 + 3;
+        const fallDuration = Math.random() * 4 + 3; 
         confetto.style.transition = `top ${fallDuration}s linear, opacity 2s ease-in`;
         const drift = (Math.random() - 0.5) * 100;
         confetto.style.transform = `translateX(${drift}px) rotate(${Math.random() * 360}deg)`;
