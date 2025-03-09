@@ -33,7 +33,7 @@
       overflow-x: hidden;
       position: relative;
     }
-    /* Force all inputs and buttons to use the same font */
+    /* Force inputs and buttons to use the same font */
     input, button {
       font-family: 'Press Start 2P', cursive;
     }
@@ -73,7 +73,7 @@
       background-position: center;
       z-index: 1;
     }
-    /* Title container with Pokéball icons on either side */
+    /* Title container with animated Pokéball icons on either side */
     .title-container {
       display: flex;
       align-items: center;
@@ -83,7 +83,6 @@
     .title-container img {
       width: 120px;
       margin: 0 2px;
-      /* Animate the title icons when the page loads */
       animation: titleBallAnimation 1s ease-out;
     }
     @keyframes titleBallAnimation {
@@ -131,9 +130,9 @@
       margin-bottom: 5px;
       color: #424242;
     }
-    /* Rare Packs card: change icon to a Master Ball icon */
+    /* Rare Packs card: change icon to a Master Ball icon (unchanged size in label here) */
     .rare-label img {
-      width: 16px;
+      width: 24px;
       vertical-align: middle;
       margin-right: 5px;
     }
@@ -294,6 +293,13 @@
       margin-top: 10px;
     }
     details summary { cursor: pointer; font-weight: bold; }
+    /* Responsive layout for smaller screens */
+    @media (max-width: 600px) {
+      .container { width: 100%; padding: 10px; }
+      .page-title { font-size: 1.5em; }
+      .title-container img { width: 80px; }
+      .luck-input { font-size: 0.7em; }
+    }
   </style>
 </head>
 <body>
@@ -341,7 +347,9 @@
       </div>
       <div class="card">
         <label>♦♦♦♦ Quad Diamonds</label>
-        <input type="number" id="4dCards" min="0" class="luck-input" />
+        <!-- Changed icon to a silver diamond placeholder -->
+        <img src="https://via.placeholder.com/150/CCCCCC/000000?text=Silver+Diamond" alt="Silver Diamond Icon" style="width:16px; vertical-align: middle; margin-right: 5px;">
+        <input type="number" id="4dCards" min="0" class="luck-input" style="vertical-align: middle;" />
       </div>
       <div class="card">
         <label class="rare-label"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png" alt="Master Ball Icon"> Rare Packs</label>
@@ -428,49 +436,49 @@
     /* Expanded Individual Rarity Descriptions in Pokémon Style */
     const rarityDescriptionsOriginal = {
       ">=150": [
-        "Legendary pull! Like snagging a shiny Mewtwo – a 50% bonus over the norm.",
-        "Mythic result – as if you caught Arceus on a once-in-a-lifetime day.",
-        "Inconceivable – your pull redefines rarity, a feat worthy of legends."
+        "Legendary pull! It's like capturing a shiny Mewtwo – a once-in-a-lifetime achievement.",
+        "Mythic result – as if you caught Arceus on a truly magical day.",
+        "Inconceivable – your pull is nothing short of legendary."
       ],
       ">=130": [
-        "Amazing pull – about 30% above expectation, like uncovering a rare, shiny Ho-Oh!",
-        "Spectacular pull – your odds soared, reminiscent of unboxing an ultra-rare card!",
-        "Incredible pull – surpassing expectations by 30%, a true collector’s dream!"
+        "Phenomenal pull! It's like discovering a radiant, shiny Ho-Oh – truly extraordinary.",
+        "Spectacular pull! Your luck shines like a dazzling, shiny Ho-Oh.",
+        "Incredible pull! It's as if fate smiled upon you with a brilliant shiny Ho-Oh."
       ],
       ">=110": [
-        "Above average – roughly 10% extra, like drawing a timely evolution card.",
-        "Nice pull – a bit more than expected, as if you snagged an extra energy boost.",
-        "Solid pull – a modest gain that brightens your deck like a well-timed evolution."
+        "Great pull! Like drawing an extra evolution card when you need it most.",
+        "Nice pull! Your deck just got a boost, as if you found an unexpected bonus card.",
+        "Solid pull – a modest gain that feels like an extra spark of evolution."
       ],
       ">=90": [
-        "Balanced pull – exactly as predicted, steady as your favorite starter.",
-        "On target – the numbers align perfectly, just like a well-planned deck.",
+        "Balanced pull – exactly as predicted, steady as your trusted starter.",
+        "On target – like a well-practiced deck, your pulls are spot on.",
         "Standard pull – meeting expectations with reliable consistency."
       ],
       ">=75": [
-        "Slightly under – about 25% fewer than expected; like a Caterpie still searching for its evolution.",
-        "Not ideal – a bit short of expectations, as if a Weedle hadn't reached its full potential.",
-        "A little off – just below the norm, like an unevolved Pokémon in a high-stakes match."
+        "Below par – like a Caterpie still struggling to evolve.",
+        "Not ideal – as if your chance for greatness was just out of reach.",
+        "A little off – not quite what you hoped for, like an unevolved Pokémon on a rough day."
       ],
       ">=60": [
-        "Poor pull – nearly 40% below expectation, much like a Magikarp’s feeble splash.",
-        "Weak pull – significantly underperforming, as if your best card stayed hidden.",
-        "Mediocre pull – falling short by 40%, not the sparkling result you hoped for."
+        "Mediocre pull – reminiscent of a Magikarp's feeble splash.",
+        "Weak pull – as if luck took a day off, like a Magikarp barely making a ripple.",
+        "Subpar pull – falling short like a Magikarp's splash that barely makes a mark."
       ],
       ">=45": [
-        "Very poor – dramatically fewer than expected; like a Slowpoke that just can’t keep up.",
-        "Disastrous – far below the odds, as if even a Koffing had more luck.",
-        "Critically low – a severe miss that leaves you wishing for a turnaround."
+        "Poor pull – like a Slowpoke lagging behind; truly disappointing.",
+        "Disastrous pull – as if even a Koffing had more spark than this.",
+        "Critically low – a missed opportunity, like a Slowpoke that just can't keep up."
       ],
       ">=25": [
         "Catastrophic pull – almost no luck, like a tiny Spearow lost among giants.",
-        "Abysmal – defying probability, as if your best card never made it out.",
-        "Utter failure – a result so low it leaves little hope for a comeback."
+        "Abysmal pull – as if your best card never saw the light of day.",
+        "Utter failure – a pull so low it leaves little hope for a comeback."
       ],
       "else": [
-        "No luck at all – a complete absence, where even Magikarp only splashes.",
-        "Absolute bust – an outcome missing every expectation.",
-        "Total failure – no positive pulls detected."
+        "No luck at all – a complete bust, where even Magikarp only splashes.",
+        "Absolute bust – an outcome that falls flat.",
+        "Total failure – no positive pulls detected; a truly unfortunate day."
       ]
     };
     const zeroRarityDescriptions = {
@@ -551,7 +559,7 @@
       ">=35": [
         { description: "Moderate – like Pikachu with a slight spark missing.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png", alt: "Pikachu" },
         { description: "Average – like Raichu just short of a full charge.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/26.png", alt: "Raichu" },
-        { description: "Room for improvement – like Jolteon needing an extra jolt.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/135.png", alt: "Jolteon" }
+        { description: "Room for improvement – like Jolteon needing that extra spark.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/135.png", alt: "Jolteon" }
       ],
       ">=20": [
         { description: "Underperforming – like Rattata barely scurrying by.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/19.png", alt: "Rattata" },
@@ -621,7 +629,7 @@
       "⭐⭐⭐ Triple Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png",
       "⭐⭐ Double Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
       "⭐ Single Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-      "♦♦♦♦ Quadruple Diamond": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/249.png",
+      "♦♦♦♦ Quadruple Diamond": "https://via.placeholder.com/150/CCCCCC/000000?text=Silver+Diamond",
       "Rare (God Pack)": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png"
     };
     // Spawn a random background Pokémon sprite every 5 seconds
@@ -631,7 +639,7 @@
       spawnRaritySprite(randomKey);
     }
     setInterval(spawnRandomBackgroundPokemon, 5000);
-    // Confetti functions (longer lasting, more pieces)
+    // Confetti functions: longer duration and more pieces
     function launchConfetti() {
       const colors = ["#f44336", "#e91e63", "#9c27b0", "#2196f3", "#03a9f4", "#00bcd4", "#4caf50", "#ffeb3b", "#ffc107", "#ff5722"];
       const numConfetti = 100;
@@ -645,7 +653,7 @@
         confetto.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         confetto.style.left = Math.random() * window.innerWidth + "px";
         confetto.style.top = "-20px";
-        const fallDuration = Math.random() * 4 + 3; // duration between 3 and 7 seconds
+        const fallDuration = Math.random() * 4 + 3; // between 3 and 7 seconds
         confetto.style.transition = `top ${fallDuration}s linear, opacity 2s ease-in`;
         const drift = (Math.random() - 0.5) * 100;
         confetto.style.transform = `translateX(${drift}px) rotate(${Math.random() * 360}deg)`;
