@@ -81,9 +81,16 @@
       margin-bottom: 20px;
     }
     .title-container img {
-      width: 60px;
-      height: auto;
-      margin: 0 5px;
+      width: 120px;
+      margin: 0 2px;
+      /* Animate the title icons when the page loads */
+      animation: titleBallAnimation 1s ease-out;
+    }
+    @keyframes titleBallAnimation {
+      0% { transform: scale(0); opacity: 0; }
+      60% { transform: scale(1.2); opacity: 1; }
+      80% { transform: scale(0.9); }
+      100% { transform: scale(1); }
     }
     .page-title {
       font-size: 2em;
@@ -253,6 +260,12 @@
       border: 2px solid #D32F2F;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      animation: resultAnimation 1s ease-in-out;
+    }
+    @keyframes resultAnimation {
+      0% { opacity: 0; transform: scale(0.5); }
+      50% { opacity: 1; transform: scale(1.2); }
+      100% { transform: scale(1); }
     }
     .confetti {
       position: fixed;
@@ -369,6 +382,9 @@
       <ul>
         <li><strong>Luck Factor (%) = (Actual ÷ Expected) × 100 - 100</strong></li>
       </ul>
+      <p>
+        Expected pull rates are: Crown Rares: 0.193%, Triple Stars: 1.12%, Double Stars: 2.55%, Single Stars: 12.7%, Quad Diamonds: 7.32%, Rare (God Pack): 0.05%.
+      </p>
       <p>
         A 0% Luck Factor means you pulled exactly as expected. Positive values indicate extra pulls, while negative values indicate fewer pulls. Each rarity displays a Pokémon‑inspired message – and if you pull zero cards in a tier, a unique message is shown.
       </p>
@@ -615,6 +631,59 @@
       spawnRaritySprite(randomKey);
     }
     setInterval(spawnRandomBackgroundPokemon, 5000);
+    // Confetti functions (longer lasting, more pieces)
+    function launchConfetti() {
+      const colors = ["#f44336", "#e91e63", "#9c27b0", "#2196f3", "#03a9f4", "#00bcd4", "#4caf50", "#ffeb3b", "#ffc107", "#ff5722"];
+      const numConfetti = 100;
+      for (let i = 0; i < numConfetti; i++) {
+        const confetto = document.createElement("div");
+        confetto.classList.add("confetti");
+        document.body.appendChild(confetto);
+        const size = Math.floor(Math.random() * 8) + 8;
+        confetto.style.width = size + "px";
+        confetto.style.height = size + "px";
+        confetto.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetto.style.left = Math.random() * window.innerWidth + "px";
+        confetto.style.top = "-20px";
+        const fallDuration = Math.random() * 4 + 3; // duration between 3 and 7 seconds
+        confetto.style.transition = `top ${fallDuration}s linear, opacity 2s ease-in`;
+        const drift = (Math.random() - 0.5) * 100;
+        confetto.style.transform = `translateX(${drift}px) rotate(${Math.random() * 360}deg)`;
+        requestAnimationFrame(() => {
+          confetto.style.top = window.innerHeight + 40 + "px";
+          confetto.style.opacity = 0;
+        });
+        setTimeout(() => {
+          if (confetto.parentNode) confetto.parentNode.removeChild(confetto);
+        }, (fallDuration + 3) * 1000);
+      }
+    }
+    function launchSadConfetti() {
+      const colors = ["#555", "#444", "#333", "#222", "#666", "#777"];
+      const numDrops = 60;
+      for (let i = 0; i < numDrops; i++) {
+        const drop = document.createElement("div");
+        drop.classList.add("confetti");
+        document.body.appendChild(drop);
+        const size = Math.floor(Math.random() * 6) + 6;
+        drop.style.width = size + "px";
+        drop.style.height = size + "px";
+        drop.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        drop.style.left = Math.random() * window.innerWidth + "px";
+        drop.style.top = "-20px";
+        const fallDuration = Math.random() * 3 + 3;
+        drop.style.transition = `top ${fallDuration}s linear, opacity 2s ease-in`;
+        const drift = (Math.random() - 0.5) * 80;
+        drop.style.transform = `translateX(${drift}px) rotate(${Math.random() * 360}deg)`;
+        requestAnimationFrame(() => {
+          drop.style.top = window.innerHeight + 40 + "px";
+          drop.style.opacity = 0.2;
+        });
+        setTimeout(() => {
+          if (drop.parentNode) drop.parentNode.removeChild(drop);
+        }, (fallDuration + 3) * 1000);
+      }
+    }
     // Calculation Logic
     function calculateAllLuck() {
       const packsOpened = parseInt(document.getElementById('packsOpened').value) || 0;
@@ -641,7 +710,7 @@
     }
     function calculateScore() {
       const pulls = {
-        "👑 Crown Rare": parseInt(document.getElementById('crCards').value) || 0,
+        "👑 Crown Rares": parseInt(document.getElementById('crCards').value) || 0,
         "⭐⭐⭐ Triple Star": parseInt(document.getElementById('3sCards').value) || 0,
         "⭐⭐ Double Star": parseInt(document.getElementById('2sCards').value) || 0,
         "⭐ Single Star": parseInt(document.getElementById('1sCards').value) || 0,
@@ -649,7 +718,7 @@
         "Rare (God Pack)": parseInt(document.getElementById('rareCards').value) || 0
       };
       const pullRates = {
-        "👑 Crown Rare": 0.00193,
+        "👑 Crown Rares": 0.00193,
         "⭐⭐⭐ Triple Star": 0.0112,
         "⭐⭐ Double Star": 0.0255,
         "⭐ Single Star": 0.127,
@@ -707,7 +776,7 @@
       else if (finalScore < 35) scoreBox.classList.add('shake');
       const overall = getOverallBracket(finalScore);
       document.getElementById('luckRating').innerHTML = overall.description;
-      document.getElementById('pokemonImage').innerHTML = `<img src="${overall.image}" alt="${overall.alt}" title="${overall.alt}" />`;
+      document.getElementById('pokemonImage').innerHTML = `<img class="result-pokemon" src="${overall.image}" alt="${overall.alt}" title="${overall.alt}" />`;
       document.getElementById('resultsSection').style.display = "block";
       if (finalScore >= 80) { launchConfetti(); }
       else if (finalScore < 35) { launchSadConfetti(); }
