@@ -33,6 +33,13 @@
       overflow-x: hidden;
       position: relative;
     }
+    /* Force all inputs and buttons to use the same font */
+    input, button {
+      font-family: 'Press Start 2P', cursive;
+    }
+    .luck-input {
+      font-size: 0.8em;
+    }
     /* Floating Pokémon decorations with continuous movement */
     @keyframes floatAround {
       0% { transform: translate(0, 0); }
@@ -66,12 +73,22 @@
       background-position: center;
       z-index: 1;
     }
-    /* Title of the game at the very top */
+    /* Title container with Pokéball icons on either side */
+    .title-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .title-container img {
+      width: 60px;
+      height: auto;
+      margin: 0 5px;
+    }
     .page-title {
       font-size: 2em;
       color: #3E2723;
       text-shadow: 2px 2px 0 #FFF, 4px 4px 0 #FFEB3B;
-      margin-bottom: 20px;
       text-align: center;
     }
     .section { margin-bottom: 20px; }
@@ -106,6 +123,12 @@
       display: block;
       margin-bottom: 5px;
       color: #424242;
+    }
+    /* Rare Packs card: change icon to a Master Ball icon */
+    .rare-label img {
+      width: 16px;
+      vertical-align: middle;
+      margin-right: 5px;
     }
     .card input,
     .packs-card input {
@@ -179,7 +202,7 @@
       margin-bottom: 10px;
     }
     ul { list-style: none; padding: 0; }
-    /* Slam animation for Luck Score by Rarity results – slower delays */
+    /* Slam animation for Luck Score by Rarity results */
     @keyframes slamIn {
       0% { opacity: 0; transform: scale(0.5) translateY(-50px); }
       60% { opacity: 1; transform: scale(1.1) translateY(10px); }
@@ -196,7 +219,7 @@
       opacity: 0;
       animation: slamIn 0.8s ease forwards;
     }
-    /* Slower sequential delays for a dramatic slam reveal */
+    /* Sequential delays for results reveal */
     #luckByRarity li:nth-child(1) { animation-delay: 1s; }
     #luckByRarity li:nth-child(2) { animation-delay: 2s; }
     #luckByRarity li:nth-child(3) { animation-delay: 3s; }
@@ -278,8 +301,12 @@
   </div>
 
   <div class="container">
-    <!-- Title at the top -->
-    <div class="page-title">Pokémon TCG Pocket Luck Calculator</div>
+    <!-- Title with Pokéball icons on either side -->
+    <div class="title-container">
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Pokéball Icon">
+      <div class="page-title">Pokémon TCG Pocket Luck Calculator</div>
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Pokéball Icon">
+    </div>
 
     <!-- Rarity Inputs (using emoji labels) -->
     <div class="rarity-grid section">
@@ -304,7 +331,7 @@
         <input type="number" id="4dCards" min="0" class="luck-input" />
       </div>
       <div class="card">
-        <label>Rare Packs</label>
+        <label class="rare-label"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png" alt="Master Ball Icon"> Rare Packs</label>
         <input type="number" id="rareCards" min="0" class="luck-input" />
       </div>
     </div>
@@ -320,9 +347,8 @@
 
     <!-- Results Section (hidden until Submit is pressed) -->
     <div id="resultsSection">
-      <!-- Overall Luck Score Section -->
+      <!-- Overall Luck Score Section (only the score is shown) -->
       <div class="section">
-        <h2>Your Overall Luck Score:</h2>
         <div id="scoreBox" class="score-highlight"></div>
         <div id="luckRating" class="mascot"></div>
         <div id="pokemonImage" class="pokemon-image"></div>
@@ -391,39 +417,39 @@
         "Inconceivable – your pull redefines rarity, a feat worthy of legends."
       ],
       ">=130": [
-        "Excellent pull – roughly 30% above expectation, like landing a secret Mega Evolution.",
-        "Stellar performance – reminiscent of a rare Charizard moment.",
-        "Very strong – your pull exceeds odds, a standout achievement."
+        "Amazing pull – about 30% above expectation, like uncovering a rare, shiny Ho-Oh!",
+        "Spectacular pull – your odds soared, reminiscent of unboxing an ultra-rare card!",
+        "Incredible pull – surpassing expectations by 30%, a true collector’s dream!"
       ],
       ">=110": [
-        "Above average – about 10% extra; a solid pull like an Eevee evolving at the right time.",
-        "Good pull – slightly exceeding expectations, like a Jolteon striking fast.",
-        "Positive variance – a modest boost over the norm."
+        "Above average – roughly 10% extra, like drawing a timely evolution card.",
+        "Nice pull – a bit more than expected, as if you snagged an extra energy boost.",
+        "Solid pull – a modest gain that brightens your deck like a well-timed evolution."
       ],
       ">=90": [
-        "Average – your pull matches expected odds, as steady as a Bulbasaur.",
-        "On target – results align perfectly with probability.",
-        "Standard – a typical pull that meets statistical predictions."
+        "Balanced pull – exactly as predicted, steady as your favorite starter.",
+        "On target – the numbers align perfectly, just like a well-planned deck.",
+        "Standard pull – meeting expectations with reliable consistency."
       ],
       ">=75": [
-        "Slightly under – around 25% fewer than expected; like a Caterpie yet to evolve.",
-        "Underperforming – a modest deficit, as if a Weedle couldn’t reach its potential.",
-        "Mildly disappointing – just a bit below the expected yield."
+        "Slightly under – about 25% fewer than expected; like a Caterpie still searching for its evolution.",
+        "Not ideal – a bit short of expectations, as if a Weedle hadn't reached its full potential.",
+        "A little off – just below the norm, like an unevolved Pokémon in a high-stakes match."
       ],
       ">=60": [
-        "Below average – about 40% fewer; a pull as unremarkable as a Magikarp’s splash.",
-        "Subpar – noticeably under the odds, like a Pidgey lost in the wind.",
-        "Poor result – clearly below statistical expectations."
+        "Poor pull – nearly 40% below expectation, much like a Magikarp’s feeble splash.",
+        "Weak pull – significantly underperforming, as if your best card stayed hidden.",
+        "Mediocre pull – falling short by 40%, not the sparkling result you hoped for."
       ],
       ">=45": [
-        "Very poor – dramatically fewer than expected; a result as dismal as a Slowpoke in a sprint.",
-        "Disastrous – far below what chance predicts, like a Koffing running out of gas.",
-        "Critically low – a severe miss against the odds."
+        "Very poor – dramatically fewer than expected; like a Slowpoke that just can’t keep up.",
+        "Disastrous – far below the odds, as if even a Koffing had more luck.",
+        "Critically low – a severe miss that leaves you wishing for a turnaround."
       ],
       ">=25": [
-        "Extremely low – nearly catastrophic; as if a Spearow was overshadowed by giants.",
-        "Abysmal – a pull that defies probability, like a Magmar’s flame sputtering.",
-        "Utter failure – an outcome that leaves nothing to chance."
+        "Catastrophic pull – almost no luck, like a tiny Spearow lost among giants.",
+        "Abysmal – defying probability, as if your best card never made it out.",
+        "Utter failure – a result so low it leaves little hope for a comeback."
       ],
       "else": [
         "No luck at all – a complete absence, where even Magikarp only splashes.",
@@ -675,7 +701,7 @@
       normalizedScore = Math.min(Math.max(normalizedScore, 0), 100);
       let finalScore = normalizedScore.toFixed(0);
       const scoreBox = document.getElementById('scoreBox');
-      scoreBox.innerHTML = `Overall Luck Score: <span class="score-number">${finalScore}</span>/100`;
+      scoreBox.innerHTML = `<span class="score-number">${finalScore}</span>/100`;
       scoreBox.classList.remove('pulse', 'shake');
       if (finalScore >= 80) scoreBox.classList.add('pulse');
       else if (finalScore < 35) scoreBox.classList.add('shake');
