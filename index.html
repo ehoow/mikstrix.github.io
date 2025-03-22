@@ -788,9 +788,9 @@
       const packsOpened = parseInt(document.getElementById('packsOpened').value);
       const spawnedRarities = {};
       
-      // Check whether to include Rare in the final score
+      // Determine whether to include Rare in overall score:
+      // If checked, use a 20% weight; if unchecked, Rare contributes 0.
       const includeRare = document.getElementById('toggleRare').checked;
-      // If included, use a 20% weight; if not, weight = 0
       const rareWeight = includeRare ? 0.2 : 0;
       
       for (let rarity in pulls) {
@@ -798,28 +798,28 @@
         let expected = pullRates[rarity] * packsOpened;
         let luckDisplay = "";
         let desc = "";
+        let contribution = 0;
         if (expected > 0) {
           if (actual === 0) {
             luckDisplay = "No pulls (below expected)";
             desc = getRarityLuckDescription(0, rarity);
-            // Always add 0 contribution
-            totalLuck += 0;
+            contribution = 0;
           } else {
             let rawLuck = (actual / expected) * 100;
             let luckFactor = rawLuck - 100;
             luckDisplay = getLuckFactorWording(luckFactor);
             desc = getRarityLuckDescription(rawLuck, rarity);
-            totalLuck += ((actual - expected) / expected) * 100;
+            contribution = ((actual - expected) / expected) * 100;
             if (!spawnedRarities[rarity]) {
               spawnRaritySprite(rarity);
               spawnedRarities[rarity] = true;
             }
           }
-          // If this is Rare (God Pack), apply weight (or ignore if weight=0)
+          // For Rare (God Pack), apply weighted contribution; for others, use full contribution.
           if (rarity === "Rare (God Pack)") {
-            totalLuck += (((actual - expected) / expected) * 100 - ((actual - expected) / expected) * 100) * (1 - rareWeight);
-            totalLuck -= ((actual - expected) / expected) * 100; // Remove its full contribution
-            totalLuck += ((actual - expected) / expected) * 100 * rareWeight;
+            totalLuck += contribution * rareWeight;
+          } else {
+            totalLuck += contribution;
           }
         } else {
           luckDisplay = "N/A";
@@ -834,8 +834,7 @@
       resultsHTML += "</ul>";
       document.getElementById('luckByRarity').innerHTML = resultsHTML;
       
-      // Calculate normalization using contributions:
-      // For 5 rarities (full weight) plus Rare weighted as specified.
+      // Normalization: effective rarities = 5 full rarities plus Rare (weighted) if included.
       const effectiveRarities = 5 + rareWeight;
       const maxLuck = effectiveRarities * 100;
       let normalizedScore = ((totalLuck + maxLuck) / (2 * maxLuck)) * 100;
