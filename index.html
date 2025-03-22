@@ -800,22 +800,22 @@
         let desc = "";
         let contribution = 0;
         if (expected > 0) {
+          // Always compute contribution using the formula,
+          // even if actual is 0 (which will yield -100).
+          let rawLuck = (actual / expected) * 100;
+          let luckFactor = rawLuck - 100;
           if (actual === 0) {
             luckDisplay = "No pulls (below expected)";
             desc = getRarityLuckDescription(0, rarity);
-            contribution = 0;
           } else {
-            let rawLuck = (actual / expected) * 100;
-            let luckFactor = rawLuck - 100;
             luckDisplay = getLuckFactorWording(luckFactor);
             desc = getRarityLuckDescription(rawLuck, rarity);
-            contribution = ((actual - expected) / expected) * 100;
             if (!spawnedRarities[rarity]) {
               spawnRaritySprite(rarity);
               spawnedRarities[rarity] = true;
             }
           }
-          // For Rare (God Pack), apply weighted contribution; for others, use full contribution.
+          contribution = ((actual - expected) / expected) * 100;
           if (rarity === "Rare (God Pack)") {
             totalLuck += contribution * rareWeight;
           } else {
@@ -834,8 +834,7 @@
       resultsHTML += "</ul>";
       document.getElementById('luckByRarity').innerHTML = resultsHTML;
       
-      // Normalize using a fixed denominator based on 5 rarities (500),
-      // regardless of Rare's contribution.
+      // Normalize using a fixed denominator based on the five non-Rare categories (500).
       const maxLuck = 500;
       let normalizedScore = ((totalLuck + maxLuck) / (2 * maxLuck)) * 100;
       normalizedScore = Math.min(Math.max(normalizedScore, 0), 100);
