@@ -834,9 +834,9 @@
       resultsHTML += "</ul>";
       document.getElementById('luckByRarity').innerHTML = resultsHTML;
       
-      // Normalization: effective rarities = 5 full rarities plus Rare (weighted) if included.
-      const effectiveRarities = 5 + rareWeight;
-      const maxLuck = effectiveRarities * 100;
+      // Normalize using a fixed denominator based on 5 rarities (500),
+      // regardless of Rare's contribution.
+      const maxLuck = 500;
       let normalizedScore = ((totalLuck + maxLuck) / (2 * maxLuck)) * 100;
       normalizedScore = Math.min(Math.max(normalizedScore, 0), 100);
       let finalScore = normalizedScore.toFixed(0);
