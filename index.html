@@ -314,6 +314,12 @@
       margin: 10px 0;
       line-height: 1.4;
     }
+    /* Add explanation for the new toggle */
+    details ul li.toggle-info {
+      margin-top: 5px;
+      font-style: italic;
+      color: #555;
+    }
     /* Ensure the formula uses the same font */
     .formula { font-family: 'Press Start 2P', cursive; }
     /* Responsive layout for smaller screens */
@@ -348,7 +354,7 @@
       <div class="title-row">
         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Pokéball Icon">
         <div class="page-title">Pokémon TCG Pocket Luck Calculator</div>
-        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Pokéball Icon">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pokéball Icon">
       </div>
       <div class="intro">
         Enter your card pull numbers and the number of packs opened to discover how lucky your pulls are!
@@ -383,10 +389,12 @@
           Rare Packs
         </label>
         <input type="number" id="rareCards" min="0" class="luck-input" />
-        <!-- Toggle button for including Rare Packs -->
-        <label style="font-size:0.7em; display:block; margin-top:5px;">
-          <input type="checkbox" id="toggleRare" checked /> Include Rare in Score
-        </label>
+        <!-- Centralised Toggle button for including Rare Packs -->
+        <div style="margin-top:5px; text-align:center;">
+          <label style="font-size:0.7em;">
+            <input type="checkbox" id="toggleRare" checked /> Include Rare in Score
+          </label>
+        </div>
       </div>
     </div>
 
@@ -432,6 +440,9 @@
         <li>Single Stars: 12.7%</li>
         <li>Quad Diamonds: 7.32%</li>
         <li>Rare (God Pack): 0.05%</li>
+        <li class="toggle-info">
+          <strong>Toggle:</strong> The "Include Rare in Score" checkbox controls Rare Packs’ contribution. When checked, Rare Packs affect your overall score (using their full luck factor, as originally calculated). When unchecked, Rare Packs are excluded from the overall score.
+        </li>
       </ul>
       <p>
         <strong>Note:</strong> Cards below Quad Diamonds are not tracked individually;
@@ -789,9 +800,8 @@
       const spawnedRarities = {};
       
       // Determine whether to include Rare in overall score:
-      // If checked, use a 20% weight; if unchecked, Rare contributes 0.
+      // If checked, include its full contribution; if unchecked, ignore it.
       const includeRare = document.getElementById('toggleRare').checked;
-      const rareWeight = includeRare ? 0.2 : 0;
       
       for (let rarity in pulls) {
         let actual = pulls[rarity];
@@ -800,8 +810,6 @@
         let desc = "";
         let contribution = 0;
         if (expected > 0) {
-          // Always compute contribution using the formula,
-          // even if actual is 0 (which will yield -100).
           let rawLuck = (actual / expected) * 100;
           let luckFactor = rawLuck - 100;
           if (actual === 0) {
@@ -817,7 +825,8 @@
           }
           contribution = ((actual - expected) / expected) * 100;
           if (rarity === "Rare (God Pack)") {
-            totalLuck += contribution * rareWeight;
+            // Only add its contribution if the toggle is enabled.
+            totalLuck += includeRare ? contribution : 0;
           } else {
             totalLuck += contribution;
           }
@@ -834,9 +843,15 @@
       resultsHTML += "</ul>";
       document.getElementById('luckByRarity').innerHTML = resultsHTML;
       
-      // Normalize using a fixed denominator based on the five non-Rare categories (500).
-      const maxLuck = 500;
-      let normalizedScore = ((totalLuck + maxLuck) / (2 * maxLuck)) * 100;
+      // Normalize:
+      // If Rare is included, use the original normalization (range of 600).
+      // If not, use normalization based solely on the 5 non-Rare categories (range of 500).
+      let normalizedScore;
+      if (includeRare) {
+        normalizedScore = ((totalLuck + 600) / 1200) * 100;
+      } else {
+        normalizedScore = ((totalLuck + 500) / 1000) * 100;
+      }
       normalizedScore = Math.min(Math.max(normalizedScore, 0), 100);
       let finalScore = normalizedScore.toFixed(0);
       
