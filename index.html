@@ -151,7 +151,7 @@
       font-size: 1em;
       color: #424242;
     }
-    /* Rare Packs: increase icon size */
+    /* God Packs: increase icon size */
     .rare-label img {
       width: 40px;
       vertical-align: middle;
@@ -355,7 +355,13 @@
       margin-top: 5px;
       text-align: left;
     }
-
+    /* New container for the God Pack toggle section */
+    .toggle-section-container {
+      border: 1px solid #FFCA28;
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 10px;
+    }
     /* Toggle Switch Style - Smaller Width */
     .switch {
       position: relative;
@@ -461,23 +467,24 @@
       <div class="card">
         <label class="rare-label">
           <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png" alt="Master Ball Icon">
-          Rare Packs
+          God Packs
         </label>
         <input type="number" id="rareCards" min="0" class="luck-input" />
-
-        <!-- Updated Toggle Layout -->
-        <div class="toggle-container">
-          <div class="toggle-info-row">
-            <label class="switch">
-              <input type="checkbox" id="toggleRare" checked />
-              <span class="switch"></span>
-            </label>
-            <span class="toggle-label">Include Rare in Score</span>
-            <span class="info-icon" id="toggleInfo" tabindex="0">&#9432;</span>
-          </div>
-          <div class="info-popup" id="infoPopup">
-            When enabled, Rare (God Pack) pulls affect your overall score with their full luck factor.
-            When disabled, they are excluded from the overall calculation.
+        <!-- New container for toggle section with border -->
+        <div class="toggle-section-container">
+          <div class="toggle-container">
+            <div class="toggle-info-row">
+              <label class="switch">
+                <input type="checkbox" id="toggleRare" checked />
+                <span class="switch"></span>
+              </label>
+              <span class="toggle-label">Include God Packs in Score</span>
+              <span class="info-icon" id="toggleInfo" tabindex="0">&#9432;</span>
+            </div>
+            <div class="info-popup" id="infoPopup">
+              When enabled, God Pack pulls affect your overall score with their full luck factor.
+              When disabled, they are excluded from the overall calculation.
+            </div>
           </div>
         </div>
       </div>
@@ -524,10 +531,10 @@
         <li>Double Stars: 2.55%</li>
         <li>Single Stars: 12.7%</li>
         <li>Quad Diamonds: 7.32%</li>
-        <li>Rare (God Pack): 0.05%</li>
+        <li>God Packs: 0.05%</li>
         <li class="toggle-info">
-          <strong>Toggle:</strong> The "Include Rare in Score" switch controls Rare Packs’ contribution.
-          When enabled, Rare packs affect the overall score (normalized over 1200).
+          <strong>Toggle:</strong> The "Include God Packs in Score" switch controls God Pack pulls’ contribution.
+          When enabled, God Pack pulls affect the overall score (normalized over 1200).
           When disabled, they are excluded (normalized over 1000).
         </li>
       </ul>
@@ -656,10 +663,10 @@
         "Zero Quad Diamonds—the rare jewels were nowhere to be found.",
         "No Quad Diamonds—the shine of perfection was absent."
       ],
-      "Rare (God Pack)": [
-        "No Rare Pack cards—the ultimate rarity was completely missed.",
-        "Zero Rare Pack cards—the jackpot remained locked.",
-        "No Rare Pack cards—the gods of rarity were silent."
+      "God Packs": [
+        "No God Pack cards—the ultimate rarity was completely missed.",
+        "Zero God Pack cards—the jackpot remained locked.",
+        "No God Pack cards—the gods of rarity were silent."
       ]
     };
     let rarityDescriptions = JSON.parse(JSON.stringify(rarityDescriptionsOriginal));
@@ -777,7 +784,7 @@
       "⭐⭐ Double Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
       "⭐ Single Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
       "♦♦♦♦ Quadruple Diamond": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/249.png",
-      "Rare (God Pack)": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png"
+      "God Packs": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png"
     };
     function spawnRandomBackgroundPokemon() {
       const keys = Object.keys(raritySprites);
@@ -872,7 +879,7 @@
         "⭐⭐ Double Star": parseInt(document.getElementById('2sCards').value) || 0,
         "⭐ Single Star": parseInt(document.getElementById('1sCards').value) || 0,
         "♦♦♦♦ Quadruple Diamond": parseInt(document.getElementById('4dCards').value) || 0,
-        "Rare (God Pack)": parseInt(document.getElementById('rareCards').value) || 0
+        "God Packs": parseInt(document.getElementById('rareCards').value) || 0
       };
       const pullRates = {
         "👑 Crown Rares": 0.00193,
@@ -880,7 +887,7 @@
         "⭐⭐ Double Star": 0.0255,
         "⭐ Single Star": 0.127,
         "♦♦♦♦ Quadruple Diamond": 0.0732,
-        "Rare (God Pack)": 1/2000
+        "God Packs": 1/2000
       };
       
       let resultsHTML = "<ul>";
@@ -913,8 +920,8 @@
             }
           }
           contribution = ((actual - expected) / expected) * 100;
-          // If Rare is unchecked, ignore its contribution
-          if (rarity === "Rare (God Pack)") {
+          // If God Packs is unchecked, ignore its contribution
+          if (rarity === "God Packs") {
             totalLuck += includeRare ? contribution : 0;
           } else {
             totalLuck += contribution;
