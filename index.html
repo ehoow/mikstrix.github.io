@@ -320,8 +320,64 @@
       font-style: italic;
       color: #555;
     }
-    /* Ensure the formula uses the same font */
-    .formula { font-family: 'Press Start 2P', cursive; }
+    /* New Toggle Switch Styles */
+    .toggle-container {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 25px;
+      vertical-align: middle;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 25px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 19px;
+      width: 19px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    .switch input:checked + .slider {
+      background-color: #D32F2F;
+    }
+    .switch input:checked + .slider:before {
+      transform: translateX(25px);
+    }
+    .toggle-label {
+      font-size: 0.7em;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+    .info-icon {
+      margin-left: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      vertical-align: middle;
+    }
+    .info-popup {
+      display: none;
+      font-size: 0.6em;
+      background: #FFFDE7;
+      border: 1px solid #FFCA28;
+      padding: 5px;
+      border-radius: 5px;
+      margin-top: 5px;
+    }
     /* Responsive layout for smaller screens */
     @media (max-width: 600px) {
       .container { width: 100%; padding: 10px; }
@@ -389,11 +445,18 @@
           Rare Packs
         </label>
         <input type="number" id="rareCards" min="0" class="luck-input" />
-        <!-- Centralised Toggle button for including Rare Packs -->
-        <div style="margin-top:5px; text-align:center;">
-          <label style="font-size:0.7em;">
-            <input type="checkbox" id="toggleRare" checked /> Include Rare in Score
+        <!-- New Toggle Switch with Info Icon -->
+        <div class="toggle-container">
+          <label class="switch">
+            <input type="checkbox" id="toggleRare" checked>
+            <span class="slider"></span>
           </label>
+          <span class="toggle-label">Include Rare in Score</span>
+          <span class="info-icon" id="toggleInfo" tabindex="0">&#9432;</span>
+          <div class="info-popup" id="infoPopup">
+            When enabled, Rare (God Pack) pulls affect your overall score with their full luck factor.
+            When disabled, they are excluded from the overall calculation.
+          </div>
         </div>
       </div>
     </div>
@@ -441,7 +504,9 @@
         <li>Quad Diamonds: 7.32%</li>
         <li>Rare (God Pack): 0.05%</li>
         <li class="toggle-info">
-          <strong>Toggle:</strong> The "Include Rare in Score" checkbox controls Rare Packs’ contribution. When checked, Rare Packs affect your overall score (using their full luck factor, as originally calculated). When unchecked, Rare Packs are excluded from the overall score.
+          <strong>Toggle:</strong> The "Include Rare in Score" switch controls Rare Packs’ contribution.
+          When enabled, Rare packs affect the overall score (normalized over 1200).
+          When disabled, they are excluded (normalized over 1000).
         </li>
       </ul>
       <p>
@@ -825,7 +890,6 @@
           }
           contribution = ((actual - expected) / expected) * 100;
           if (rarity === "Rare (God Pack)") {
-            // Only add its contribution if the toggle is enabled.
             totalLuck += includeRare ? contribution : 0;
           } else {
             totalLuck += contribution;
@@ -844,8 +908,8 @@
       document.getElementById('luckByRarity').innerHTML = resultsHTML;
       
       // Normalize:
-      // If Rare is included, use the original normalization (range of 600).
-      // If not, use normalization based solely on the 5 non-Rare categories (range of 500).
+      // If Rare is included, use normalization based on 6 categories (range 1200).
+      // If not, use normalization based on 5 categories (range 1000).
       let normalizedScore;
       if (includeRare) {
         normalizedScore = ((totalLuck + 600) / 1200) * 100;
@@ -868,6 +932,12 @@
       else if (finalScore < 35) launchSadConfetti();
     }
     document.getElementById('submitButton').addEventListener('click', calculateAllLuck);
+    
+    // Toggle info popup when info icon is clicked
+    document.getElementById('toggleInfo').addEventListener('click', function(){
+      const popup = document.getElementById('infoPopup');
+      popup.style.display = (popup.style.display === "block") ? "none" : "block";
+    });
   </script>
 </body>
 </html>
