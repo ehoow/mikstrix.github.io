@@ -470,22 +470,23 @@
           God Packs
         </label>
         <input type="number" id="rareCards" min="0" class="luck-input" />
-        <!-- New container for toggle section with border -->
-        <div class="toggle-section-container">
-          <div class="toggle-container">
-            <div class="toggle-info-row">
-              <label class="switch">
-                <input type="checkbox" id="toggleRare" checked />
-                <span class="switch"></span>
-              </label>
-              <span class="toggle-label">Include God Packs in Score</span>
-              <span class="info-icon" id="toggleInfo" tabindex="0">&#9432;</span>
-            </div>
-            <div class="info-popup" id="infoPopup">
-              When enabled, God Pack pulls affect your overall score with their full luck factor.
-              When disabled, they are excluded from the overall calculation.
-            </div>
-          </div>
+      </div>
+    </div>
+    
+    <!-- Toggle Section Container (placed outside the God Packs card) -->
+    <div class="toggle-section-container">
+      <div class="toggle-container">
+        <div class="toggle-info-row">
+          <label class="switch">
+            <input type="checkbox" id="toggleRare" checked />
+            <span class="switch"></span>
+          </label>
+          <span class="toggle-label">Include God Packs in Score</span>
+          <span class="info-icon" id="toggleInfo" tabindex="0">&#9432;</span>
+        </div>
+        <div class="info-popup" id="infoPopup">
+          When enabled, God Pack pulls affect your overall score with their full luck factor.
+          When disabled, they are excluded from the overall calculation.
         </div>
       </div>
     </div>
