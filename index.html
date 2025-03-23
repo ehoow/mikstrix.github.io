@@ -44,6 +44,7 @@
       75% { transform: translate(10px, -10px); }
       100% { transform: translate(0, 0); }
     }
+    /* Background floating sprites – lower z-index */
     .floating-pokemon {
       position: fixed;
       z-index: 0;
@@ -130,7 +131,7 @@
       border-radius: 10px;
       padding: 10px;
       text-align: center;
-      overflow: hidden;
+      overflow: hidden; /* keep content inside borders */
       opacity: 0;
       animation: fadeInUp 0.5s ease forwards;
       display: flex;
@@ -143,7 +144,7 @@
     .rarity-grid .card:nth-child(4) { animation-delay: 0.8s; }
     .rarity-grid .card:nth-child(5) { animation-delay: 1s; }
     .rarity-grid .card:nth-child(6) { animation-delay: 1.2s; }
-    /* Card label: reduce font-size so text fits inside the borders */
+    /* Card label: use smaller font so text fits */
     .rarity-grid .card label {
       display: block;
       width: 100%;
@@ -154,7 +155,7 @@
       text-overflow: ellipsis;
       font-size: 0.8em;
     }
-    /* Icon placed below the description */
+    /* Place the icon below the label */
     .rarity-grid .card .rarity-icon {
       display: block;
       margin: 0 auto 8px;
@@ -185,17 +186,17 @@
       height: 1em;
       vertical-align: -0.15em;
     }
-    /* God Packs icon: reduced by half from previous size */
+    /* God Packs icon: enlarge slightly relative to others */
     .god-packs-icon {
-      font-size: 1em;
+      font-size: 1.5em;
     }
     .god-packs-icon img {
-      width: 1em;
+      width: 1.5em;
       height: auto;
       vertical-align: -0.15em;
       max-width: 100%;
     }
-    /* Packs card: no fixed width so it sizes naturally */
+    /* Packs card: let it size naturally */
     .packs-card {
       background: #FFEBCD;
       border: 2px solid #FFCA28;
@@ -340,7 +341,7 @@
       font-style: italic;
       color: #555;
     }
-    /* Toggle Switch & Info Icon: New Styles */
+    /* Toggle Switch & Info Icon */
     .toggle-container {
       display: flex;
       flex-direction: column;
@@ -381,7 +382,7 @@
       margin-top: 10px;
       margin-bottom: 20px;
     }
-    /* Toggle Switch Style - Smaller Width */
+    /* Toggle Switch Style */
     .switch {
       position: relative;
       display: inline-block;
@@ -432,7 +433,7 @@
 <body>
   <!-- Background decal -->
   <div class="bg-decal"></div>
-  <!-- Background floating Pokémon (remain behind) -->
+  <!-- Background floating Pokémon sprites (remain behind) -->
   <div class="floating-pokemon top-left">
     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pikachu">
   </div>
@@ -461,31 +462,37 @@
 
     <!-- Rarity Inputs -->
     <div class="rarity-grid section">
+      <!-- Crown Rares -->
       <div class="card">
         <label>Crown Rares</label>
         <div class="rarity-icon">👑</div>
         <input type="number" id="crCards" min="0" class="luck-input" />
       </div>
+      <!-- Triple Stars -->
       <div class="card">
         <label>Triple Stars</label>
         <div class="rarity-icon">⭐⭐⭐</div>
         <input type="number" id="3sCards" min="0" class="luck-input" />
       </div>
+      <!-- Double Stars -->
       <div class="card">
         <label>Double Stars</label>
         <div class="rarity-icon">⭐⭐</div>
         <input type="number" id="2sCards" min="0" class="luck-input" />
       </div>
+      <!-- Single Stars -->
       <div class="card">
         <label>Single Stars</label>
         <div class="rarity-icon">⭐</div>
         <input type="number" id="1sCards" min="0" class="luck-input" />
       </div>
+      <!-- Quad Diamonds -->
       <div class="card">
         <label>Quad Diamonds</label>
         <div class="rarity-icon">♦♦♦♦</div>
         <input type="number" id="4dCards" min="0" class="luck-input" />
       </div>
+      <!-- God Packs -->
       <div class="card">
         <label>God Packs</label>
         <div class="rarity-icon god-packs-icon">
@@ -569,7 +576,6 @@
   </div>
 
   <script>
-    // Wrap event listener attachments in DOMContentLoaded to ensure elements exist
     document.addEventListener("DOMContentLoaded", function() {
       const inputIds = ['crCards', '3sCards', '2sCards', '1sCards', '4dCards', 'rareCards', 'packsOpened'];
       inputIds.forEach(id => {
@@ -588,7 +594,7 @@
                                   .filter(inp => inp.id !== 'packsOpened')
                                   .reduce((sum, inp) => sum + (parseInt(inp.value) || 0), 0);
             if (totalCards > maxPossible) {
-              document.getElementById('errorHandling').innerHTML = 
+              document.getElementById('errorHandling').innerHTML =
                 `The total cards entered (${totalCards}) exceed the maximum of ${maxPossible} for ${packs} pack(s)!`;
             } else {
               document.getElementById('errorHandling').innerHTML = '';
@@ -607,8 +613,8 @@
         popup.style.display = (popup.style.display === "block") ? "none" : "block";
       });
     });
-
-    // Modify spawnRaritySprite to accept a parameter indicating if the sprite should be on top
+    
+    // spawnRaritySprite: topSprite parameter determines if sprite should be on top (result sprite)
     function spawnRaritySprite(rarity, topSprite) {
       if (!raritySprites[rarity]) return;
       const img = document.createElement("img");
@@ -636,7 +642,7 @@
         setTimeout(() => { if (img.parentNode) img.parentNode.removeChild(img); }, 1000);
       }, 6000);
     }
-    // Background sprite spawner uses low z-index
+    
     function spawnRandomBackgroundPokemon() {
       const keys = Object.keys(raritySprites);
       const randomKey = keys[Math.floor(Math.random() * keys.length)];
