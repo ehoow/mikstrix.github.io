@@ -133,8 +133,7 @@
       text-align: center;
       opacity: 0;
       animation: fadeInUp 0.5s ease forwards;
-      /* For uniform alignment of label & input: */
-      display: flex;
+      display: flex;                /* uniform layout */
       flex-direction: column;
       align-items: center;
     }
@@ -145,26 +144,14 @@
     .rarity-grid .card:nth-child(5) { animation-delay: 1s; }
     .rarity-grid .card:nth-child(6) { animation-delay: 1.2s; }
     .rarity-grid .card label {
-      /* Center icon/title horizontally, with a small gap if there's an icon. */
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 4px;
+      gap: 4px;              /* small gap between icon and text */
       margin-bottom: 8px;
       text-align: center;
     }
-    /* Quadruple Diamonds: use text-based icon */
-    .quad-diamonds-label {
-      font-size: 1em;
-      color: #424242;
-    }
-    /* God Packs: bigger icon, but remove default margin so we rely on 'gap' */
-    .rare-label img {
-      width: 40px;
-      vertical-align: middle;
-      margin: 0; /* overridden so we can rely on gap instead */
-    }
-    .card input {
+    .rarity-grid .card input {
       width: 60px;
       padding: 5px;
       font-size: 1.1em;
@@ -173,19 +160,34 @@
       text-align: center;
       transition: transform 0.2s;
     }
-    .card input:focus {
+    .rarity-grid .card input:focus {
       border-color: #D32F2F;
       box-shadow: 0 0 5px rgba(211,47,47,0.5);
       outline: none;
       transform: scale(1.1);
     }
+
+    /* Icon sizing fix for emojis and images */
+    .rarity-icon {
+      display: inline-block;
+      font-size: 1.2em;  /* Adjust to your liking */
+      line-height: 1;    /* Helps keep them aligned uniformly */
+    }
+    /* If there's an <img> inside .rarity-icon, size it to match the emoji scale */
+    .rarity-icon img {
+      width: 1em;       /* same as font-size */
+      height: 1em;
+      vertical-align: -0.15em; /* tweak to center image with text */
+    }
+
+    /* Packs card (no forced width) */
     .packs-card {
       background: #FFEBCD;
       border: 2px solid #FFCA28;
       border-radius: 10px;
       padding: 10px;
       text-align: center;
-      width: 150px;
+      /* width: 150px;  <-- removed to avoid wide box */
       margin: 0 auto 20px auto;
       transition: transform 0.2s, box-shadow 0.2s;
     }
@@ -319,7 +321,6 @@
       margin: 10px 0;
       line-height: 1.4;
     }
-    /* Add explanation for the new toggle */
     details ul li.toggle-info {
       margin-top: 5px;
       font-style: italic;
@@ -360,7 +361,7 @@
       margin-top: 5px;
       text-align: left;
     }
-    /* New container for the God Pack toggle section */
+    /* Toggle section container */
     .toggle-section-container {
       border: 1px solid #FFCA28;
       border-radius: 10px;
@@ -450,36 +451,59 @@
 
     <!-- Rarity Inputs -->
     <div class="rarity-grid section">
+      <!-- Crown Rares -->
       <div class="card">
-        <label>👑 Crown Rares</label>
+        <label>
+          <span class="rarity-icon">👑</span>
+          Crown Rares
+        </label>
         <input type="number" id="crCards" min="0" class="luck-input" />
       </div>
+      <!-- Triple Stars -->
       <div class="card">
-        <label>⭐⭐⭐ Triple Stars</label>
+        <label>
+          <span class="rarity-icon">⭐⭐⭐</span>
+          Triple Stars
+        </label>
         <input type="number" id="3sCards" min="0" class="luck-input" />
       </div>
+      <!-- Double Stars -->
       <div class="card">
-        <label>⭐⭐ Double Stars</label>
+        <label>
+          <span class="rarity-icon">⭐⭐</span>
+          Double Stars
+        </label>
         <input type="number" id="2sCards" min="0" class="luck-input" />
       </div>
+      <!-- Single Stars -->
       <div class="card">
-        <label>⭐ Single Stars</label>
+        <label>
+          <span class="rarity-icon">⭐</span>
+          Single Stars
+        </label>
         <input type="number" id="1sCards" min="0" class="luck-input" />
       </div>
+      <!-- Quad Diamonds -->
       <div class="card">
-        <label class="quad-diamonds-label">♦♦♦♦ Quad Diamonds</label>
+        <label>
+          <span class="rarity-icon">♦♦♦♦</span>
+          Quad Diamonds
+        </label>
         <input type="number" id="4dCards" min="0" class="luck-input" />
       </div>
+      <!-- God Packs -->
       <div class="card">
-        <label class="rare-label">
-          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png" alt="Master Ball Icon">
+        <label>
+          <span class="rarity-icon">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png" alt="Master Ball Icon">
+          </span>
           God Packs
         </label>
         <input type="number" id="rareCards" min="0" class="luck-input" />
       </div>
     </div>
 
-    <!-- Toggle Section Container (outside the God Packs card) -->
+    <!-- Toggle Section Container -->
     <div class="toggle-section-container">
       <div class="toggle-container">
         <div class="toggle-info-row">
