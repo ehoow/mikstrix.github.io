@@ -36,7 +36,7 @@
     /* Ensure inputs and buttons use the same font */
     input, button { font-family: 'Press Start 2P', cursive; }
     .luck-input { font-size: 0.8em; }
-    /* Floating Pokémon decorations */
+    /* Floating Pokémon decorations (background sprites) */
     @keyframes floatAround {
       0% { transform: translate(0, 0); }
       25% { transform: translate(30px, -20px); }
@@ -44,7 +44,6 @@
       75% { transform: translate(10px, -10px); }
       100% { transform: translate(0, 0); }
     }
-    /* Background floating sprites – lower z-index */
     .floating-pokemon {
       position: fixed;
       z-index: 0;
@@ -131,7 +130,7 @@
       border-radius: 10px;
       padding: 10px;
       text-align: center;
-      overflow: hidden;  /* ensure content stays inside */
+      overflow: hidden;
       opacity: 0;
       animation: fadeInUp 0.5s ease forwards;
       display: flex;
@@ -144,7 +143,7 @@
     .rarity-grid .card:nth-child(4) { animation-delay: 0.8s; }
     .rarity-grid .card:nth-child(5) { animation-delay: 1s; }
     .rarity-grid .card:nth-child(6) { animation-delay: 1.2s; }
-    /* Instead of combining icon and text in one label, separate them */
+    /* Card label: reduce font-size so text fits inside the borders */
     .rarity-grid .card label {
       display: block;
       width: 100%;
@@ -153,7 +152,9 @@
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+      font-size: 0.8em;
     }
+    /* Icon placed below the description */
     .rarity-grid .card .rarity-icon {
       display: block;
       margin: 0 auto 8px;
@@ -184,17 +185,17 @@
       height: 1em;
       vertical-align: -0.15em;
     }
-    /* God Packs icon: moderately larger (using the master ball image) */
+    /* God Packs icon: reduced by half from previous size */
     .god-packs-icon {
-      font-size: 2em;
+      font-size: 1em;
     }
     .god-packs-icon img {
-      width: 2em;
+      width: 1em;
       height: auto;
       vertical-align: -0.15em;
       max-width: 100%;
     }
-    /* Packs card: remove fixed width so it sizes naturally */
+    /* Packs card: no fixed width so it sizes naturally */
     .packs-card {
       background: #FFEBCD;
       border: 2px solid #FFCA28;
@@ -343,7 +344,7 @@
     .toggle-container {
       display: flex;
       flex-direction: column;
-      align-items: center; /* horizontally center everything */
+      align-items: center;
       margin-top: 10px;
     }
     .toggle-info-row {
@@ -351,7 +352,7 @@
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      gap: 4px; /* space between items */
+      gap: 4px;
     }
     .toggle-label {
       font-size: 0.7em;
@@ -373,19 +374,18 @@
       margin-top: 5px;
       text-align: left;
     }
-    /* Toggle section container */
     .toggle-section-container {
       border: 1px solid #FFCA28;
       border-radius: 10px;
       padding: 10px;
       margin-top: 10px;
-      margin-bottom: 20px; /* Extra spacing before Packs Opened */
+      margin-bottom: 20px;
     }
     /* Toggle Switch Style - Smaller Width */
     .switch {
       position: relative;
       display: inline-block;
-      width: 30px; /* reduced width */
+      width: 30px;
       height: 16px;
     }
     .switch input {
@@ -421,7 +421,6 @@
     .switch input:checked + span:before {
       transform: translateX(16px);
     }
-    /* Responsive layout for smaller screens */
     @media (max-width: 600px) {
       .container { width: 100%; padding: 10px; }
       .page-title { font-size: 1.5em; }
@@ -433,7 +432,7 @@
 <body>
   <!-- Background decal -->
   <div class="bg-decal"></div>
-  <!-- Floating Pokémon decorations (background sprites remain behind) -->
+  <!-- Background floating Pokémon (remain behind) -->
   <div class="floating-pokemon top-left">
     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pikachu">
   </div>
@@ -462,37 +461,31 @@
 
     <!-- Rarity Inputs -->
     <div class="rarity-grid section">
-      <!-- Crown Rares -->
       <div class="card">
         <label>Crown Rares</label>
         <div class="rarity-icon">👑</div>
         <input type="number" id="crCards" min="0" class="luck-input" />
       </div>
-      <!-- Triple Stars -->
       <div class="card">
         <label>Triple Stars</label>
         <div class="rarity-icon">⭐⭐⭐</div>
         <input type="number" id="3sCards" min="0" class="luck-input" />
       </div>
-      <!-- Double Stars -->
       <div class="card">
         <label>Double Stars</label>
         <div class="rarity-icon">⭐⭐</div>
         <input type="number" id="2sCards" min="0" class="luck-input" />
       </div>
-      <!-- Single Stars -->
       <div class="card">
         <label>Single Stars</label>
         <div class="rarity-icon">⭐</div>
         <input type="number" id="1sCards" min="0" class="luck-input" />
       </div>
-      <!-- Quad Diamonds -->
       <div class="card">
         <label>Quad Diamonds</label>
         <div class="rarity-icon">♦♦♦♦</div>
         <input type="number" id="4dCards" min="0" class="luck-input" />
       </div>
-      <!-- God Packs -->
       <div class="card">
         <label>God Packs</label>
         <div class="rarity-icon god-packs-icon">
@@ -576,46 +569,9 @@
   </div>
 
   <script>
-    // Modify spawnRaritySprite to accept a parameter indicating whether the sprite should appear on top
-    function spawnRaritySprite(rarity, topSprite) {
-      if (!raritySprites[rarity]) return;
-      const img = document.createElement("img");
-      img.src = raritySprites[rarity];
-      img.alt = rarity;
-      img.style.position = "fixed";
-      img.style.width = "50px";
-      img.style.opacity = 0;
-      img.style.transition = "opacity 1s ease, transform 1s ease";
-      // Set z-index based on whether it's a result sprite (topSprite) or background
-      img.style.zIndex = topSprite ? "10000" : "0";
-      const padding = 50;
-      const left = Math.random() * (window.innerWidth - padding * 2) + padding;
-      const top = Math.random() * (window.innerHeight - padding * 2) + padding;
-      img.style.left = left + "px";
-      img.style.top = top + "px";
-      document.body.appendChild(img);
-      setTimeout(() => {
-        img.style.opacity = 1;
-        img.style.transform = "scale(1.2) rotate(15deg)";
-      }, 100);
-      img.classList.add("floating-animation");
-      setTimeout(() => {
-        img.style.opacity = 0;
-        img.style.transform = "scale(0.5) rotate(-15deg)";
-        setTimeout(() => { if (img.parentNode) img.parentNode.removeChild(img); }, 1000);
-      }, 6000);
-    }
-    // Background sprite spawner – uses low z-index
-    function spawnRandomBackgroundPokemon() {
-      const keys = Object.keys(raritySprites);
-      const randomKey = keys[Math.floor(Math.random() * keys.length)];
-      spawnRaritySprite(randomKey, false);
-    }
-    setInterval(spawnRandomBackgroundPokemon, 2000); // every 2 seconds
-
-    // Other code remains the same...
-    const inputIds = ['crCards', '3sCards', '2sCards', '1sCards', '4dCards', 'rareCards', 'packsOpened'];
-    document.addEventListener("DOMContentLoaded", () => {
+    // Wrap event listener attachments in DOMContentLoaded to ensure elements exist
+    document.addEventListener("DOMContentLoaded", function() {
+      const inputIds = ['crCards', '3sCards', '2sCards', '1sCards', '4dCards', 'rareCards', 'packsOpened'];
       inputIds.forEach(id => {
         const saved = localStorage.getItem(id);
         if (saved !== null) {
@@ -645,13 +601,57 @@
         const duration = Math.floor(Math.random() * 8) + 8;
         el.style.animationDuration = duration + 's';
       });
+      document.getElementById('submitButton').addEventListener('click', calculateAllLuck);
+      document.getElementById('toggleInfo').addEventListener('click', function(){
+        const popup = document.getElementById('infoPopup');
+        popup.style.display = (popup.style.display === "block") ? "none" : "block";
+      });
     });
+
+    // Modify spawnRaritySprite to accept a parameter indicating if the sprite should be on top
+    function spawnRaritySprite(rarity, topSprite) {
+      if (!raritySprites[rarity]) return;
+      const img = document.createElement("img");
+      img.src = raritySprites[rarity];
+      img.alt = rarity;
+      img.style.position = "fixed";
+      img.style.width = "50px";
+      img.style.opacity = 0;
+      img.style.transition = "opacity 1s ease, transform 1s ease";
+      img.style.zIndex = topSprite ? "10000" : "0";
+      const padding = 50;
+      const left = Math.random() * (window.innerWidth - padding * 2) + padding;
+      const top = Math.random() * (window.innerHeight - padding * 2) + padding;
+      img.style.left = left + "px";
+      img.style.top = top + "px";
+      document.body.appendChild(img);
+      setTimeout(() => {
+        img.style.opacity = 1;
+        img.style.transform = "scale(1.2) rotate(15deg)";
+      }, 100);
+      img.classList.add("floating-animation");
+      setTimeout(() => {
+        img.style.opacity = 0;
+        img.style.transform = "scale(0.5) rotate(-15deg)";
+        setTimeout(() => { if (img.parentNode) img.parentNode.removeChild(img); }, 1000);
+      }, 6000);
+    }
+    // Background sprite spawner uses low z-index
+    function spawnRandomBackgroundPokemon() {
+      const keys = Object.keys(raritySprites);
+      const randomKey = keys[Math.floor(Math.random() * keys.length)];
+      spawnRaritySprite(randomKey, false);
+    }
+    setInterval(spawnRandomBackgroundPokemon, 2000);
+    
     function saveInputs() {
+      const inputIds = ['crCards', '3sCards', '2sCards', '1sCards', '4dCards', 'rareCards', 'packsOpened'];
       inputIds.forEach(id => {
         const value = document.getElementById(id).value;
         localStorage.setItem(id, value);
       });
     }
+    
     const rarityDescriptionsOriginal = {
       ">=150": [
         "Legendary pull! It's like capturing a shiny Mewtwo—a once-in-a-lifetime achievement.",
@@ -699,6 +699,7 @@
         "Total failure—no positive pulls detected; an unfortunate day."
       ]
     };
+    
     const zeroRarityDescriptions = {
       "👑 Crown Rare": [
         "No Crown Rares—every legend has an off day.",
@@ -731,7 +732,9 @@
         "No God Pack cards—the gods of rarity were silent."
       ]
     };
+    
     let rarityDescriptions = JSON.parse(JSON.stringify(rarityDescriptionsOriginal));
+    
     function pickUniqueDescription(rangeKey) {
       if (!rarityDescriptions[rangeKey] || rarityDescriptions[rangeKey].length === 0) {
         rarityDescriptions[rangeKey] = [...rarityDescriptionsOriginal[rangeKey]];
@@ -740,6 +743,7 @@
       const index = Math.floor(Math.random() * arr.length);
       return arr.splice(index, 1)[0];
     }
+    
     function getRarityLuckDescription(score, rarityKey) {
       const luckScore = parseFloat(score);
       if (isNaN(luckScore)) return "";
@@ -758,6 +762,7 @@
       else if (luckScore >= 25) return pickUniqueDescription(">=25");
       else return pickUniqueDescription("else");
     }
+    
     const overallBrackets = {
       ">=80": [
         { description: "Unstoppable—like Mewtwo at full power!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png", alt: "Mewtwo" },
@@ -790,6 +795,7 @@
         { description: "Catastrophic—like Ditto failing to transform your fate.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/132.png", alt: "Ditto" }
       ]
     };
+    
     function getOverallBracket(score) {
       const s = parseFloat(score);
       if (isNaN(s)) return null;
@@ -803,6 +809,7 @@
       const options = overallBrackets[key];
       return options[Math.floor(Math.random() * options.length)];
     }
+    
     function getLuckFactorWording(luckFactor) {
       if (luckFactor > 0) {
         return `You pulled <span class="score-number green">${luckFactor.toFixed(0)}%</span> more than expected. <span class="arrow green">↑</span>`;
@@ -812,6 +819,7 @@
         return `Exactly on the mark (as expected).`;
       }
     }
+    
     function calculateAllLuck() {
       const packsOpened = parseInt(document.getElementById('packsOpened').value) || 0;
       if (packsOpened <= 0) {
@@ -835,6 +843,7 @@
       calculateScore();
       saveInputs();
     }
+    
     function calculateScore() {
       const pulls = {
         "👑 Crown Rares": parseInt(document.getElementById('crCards').value) || 0,
@@ -873,7 +882,7 @@
             luckDisplay = getLuckFactorWording(luckFactor);
             desc = getRarityLuckDescription(rawLuck, rarity);
             if (!spawnedRarities[rarity]) {
-              // Spawn result sprite with topSprite true so it appears on top
+              // Spawn the result sprite on top only
               spawnRaritySprite(rarity, true);
               spawnedRarities[rarity] = true;
             }
@@ -917,11 +926,60 @@
       if (finalScore >= 80) launchConfetti();
       else if (finalScore < 35) launchSadConfetti();
     }
-    document.getElementById('submitButton').addEventListener('click', calculateAllLuck);
-    document.getElementById('toggleInfo').addEventListener('click', function(){
-      const popup = document.getElementById('infoPopup');
-      popup.style.display = (popup.style.display === "block") ? "none" : "block";
-    });
+    
+    function launchConfetti() {
+      const colors = ["#f44336", "#e91e63", "#9c27b0", "#2196f3", "#03a9f4", "#00bcd4", "#4caf50", "#ffeb3b", "#ffc107", "#ff5722"];
+      const numPieces = 100;
+      for (let i = 0; i < numPieces; i++) {
+        const confetto = document.createElement("div");
+        confetto.classList.add("confetti");
+        document.body.appendChild(confetto);
+        const size = Math.floor(Math.random() * 8) + 8;
+        confetto.style.width = size + "px";
+        confetto.style.height = size + "px";
+        confetto.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetto.style.left = Math.random() * window.innerWidth + "px";
+        confetto.style.top = "-20px";
+        const fallDuration = Math.random() * 4 + 3; 
+        confetto.style.transition = `top ${fallDuration}s linear, opacity 2s ease-in`;
+        const drift = (Math.random() - 0.5) * 100;
+        confetto.style.transform = `translateX(${drift}px) rotate(${Math.random() * 360}deg)`;
+        requestAnimationFrame(() => {
+          confetto.style.top = window.innerHeight + 40 + "px";
+          confetto.style.opacity = 0;
+        });
+        setTimeout(() => {
+          if (confetto.parentNode) confetto.parentNode.removeChild(confetto);
+        }, (fallDuration + 3) * 1000);
+      }
+    }
+    
+    function launchSadConfetti() {
+      const colors = ["#555", "#444", "#333", "#222", "#666", "#777"];
+      const numDrops = 60;
+      for (let i = 0; i < numDrops; i++) {
+        const drop = document.createElement("div");
+        drop.classList.add("confetti");
+        document.body.appendChild(drop);
+        const size = Math.floor(Math.random() * 6) + 6;
+        drop.style.width = size + "px";
+        drop.style.height = size + "px";
+        drop.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        drop.style.left = Math.random() * window.innerWidth + "px";
+        drop.style.top = "-20px";
+        const fallDuration = Math.random() * 3 + 3;
+        drop.style.transition = `top ${fallDuration}s linear, opacity 2s ease-in`;
+        const drift = (Math.random() - 0.5) * 80;
+        drop.style.transform = `translateX(${drift}px) rotate(${Math.random() * 360}deg)`;
+        requestAnimationFrame(() => {
+          drop.style.top = window.innerHeight + 40 + "px";
+          drop.style.opacity = 0.2;
+        });
+        setTimeout(() => {
+          if (drop.parentNode) drop.parentNode.removeChild(drop);
+        }, (fallDuration + 3) * 1000);
+      }
+    }
   </script>
 </body>
 </html>
