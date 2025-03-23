@@ -36,7 +36,7 @@
     /* Ensure inputs and buttons use the same font */
     input, button { font-family: 'Press Start 2P', cursive; }
     .luck-input { font-size: 0.8em; }
-    /* Floating Pokémon decorations (background sprites) */
+    /* Floating Pokémon decorations */
     @keyframes floatAround {
       0% { transform: translate(0, 0); }
       25% { transform: translate(30px, -20px); }
@@ -44,10 +44,9 @@
       75% { transform: translate(10px, -10px); }
       100% { transform: translate(0, 0); }
     }
-    /* Background floating sprites – lower z-index */
     .floating-pokemon {
       position: fixed;
-      z-index: 0;
+      z-index: 10000; /* These sprites float on top (if you need them on top) */
       animation: floatAround 20s ease-in-out infinite;
     }
     .floating-pokemon.top-left { top: 10px; left: 10px; width: 60px; }
@@ -131,7 +130,7 @@
       border-radius: 10px;
       padding: 10px;
       text-align: center;
-      overflow: hidden; /* keep content inside borders */
+      overflow: hidden;
       opacity: 0;
       animation: fadeInUp 0.5s ease forwards;
       display: flex;
@@ -144,18 +143,15 @@
     .rarity-grid .card:nth-child(4) { animation-delay: 0.8s; }
     .rarity-grid .card:nth-child(5) { animation-delay: 1s; }
     .rarity-grid .card:nth-child(6) { animation-delay: 1.2s; }
-    /* Card label: use smaller font so text fits */
     .rarity-grid .card label {
-      display: block;
-      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 8px;
       text-align: center;
-      margin-bottom: 4px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
       font-size: 0.8em;
     }
-    /* Place the icon below the label */
     .rarity-grid .card .rarity-icon {
       display: block;
       margin: 0 auto 8px;
@@ -177,26 +173,25 @@
       outline: none;
       transform: scale(1.1);
     }
-    /* Standard icon sizing for rarity icons */
     .rarity-icon {
       font-size: 1em;
+      line-height: 1;
     }
     .rarity-icon img {
       width: 1em;
       height: 1em;
       vertical-align: -0.15em;
     }
-    /* God Packs icon: enlarge slightly relative to others */
+    /* Enlarged God Packs icon */
     .god-packs-icon {
-      font-size: 1.5em;
+      font-size: 2.5em;
     }
     .god-packs-icon img {
-      width: 1.5em;
+      width: 2.5em;
       height: auto;
       vertical-align: -0.15em;
       max-width: 100%;
     }
-    /* Packs card: let it size naturally */
     .packs-card {
       background: #FFEBCD;
       border: 2px solid #FFCA28;
@@ -251,7 +246,6 @@
       margin-bottom: 10px;
     }
     ul { list-style: none; padding: 0; }
-    /* Slam animation for results */
     @keyframes slamIn {
       0% { opacity: 0; transform: scale(0.5) translateY(-50px); }
       60% { opacity: 1; transform: scale(1.1) translateY(10px); }
@@ -268,7 +262,6 @@
       opacity: 0;
       animation: slamIn 0.8s ease forwards;
     }
-    /* Staggered delays for results */
     #luckByRarity li:nth-child(1) { animation-delay: 1s; }
     #luckByRarity li:nth-child(2) { animation-delay: 2s; }
     #luckByRarity li:nth-child(3) { animation-delay: 3s; }
@@ -321,7 +314,6 @@
     @keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-5px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } }
     .shake { animation: shake 0.6s; }
     #resultsSection { display: none; }
-    /* Revised "How It Works" section */
     details {
       font-size: 0.8em;
       color: #3E2723;
@@ -341,7 +333,6 @@
       font-style: italic;
       color: #555;
     }
-    /* Toggle Switch & Info Icon */
     .toggle-container {
       display: flex;
       flex-direction: column;
@@ -382,7 +373,6 @@
       margin-top: 10px;
       margin-bottom: 20px;
     }
-    /* Toggle Switch Style */
     .switch {
       position: relative;
       display: inline-block;
@@ -433,7 +423,7 @@
 <body>
   <!-- Background decal -->
   <div class="bg-decal"></div>
-  <!-- Background floating Pokémon sprites (remain behind) -->
+  <!-- Floating Pokémon decorations -->
   <div class="floating-pokemon top-left">
     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pikachu">
   </div>
@@ -462,42 +452,48 @@
 
     <!-- Rarity Inputs -->
     <div class="rarity-grid section">
-      <!-- Crown Rares -->
       <div class="card">
-        <label>Crown Rares</label>
-        <div class="rarity-icon">👑</div>
+        <label>
+          <span class="rarity-icon">👑</span>
+          Crown Rares
+        </label>
         <input type="number" id="crCards" min="0" class="luck-input" />
       </div>
-      <!-- Triple Stars -->
       <div class="card">
-        <label>Triple Stars</label>
-        <div class="rarity-icon">⭐⭐⭐</div>
+        <label>
+          <span class="rarity-icon">⭐⭐⭐</span>
+          Triple Stars
+        </label>
         <input type="number" id="3sCards" min="0" class="luck-input" />
       </div>
-      <!-- Double Stars -->
       <div class="card">
-        <label>Double Stars</label>
-        <div class="rarity-icon">⭐⭐</div>
+        <label>
+          <span class="rarity-icon">⭐⭐</span>
+          Double Stars
+        </label>
         <input type="number" id="2sCards" min="0" class="luck-input" />
       </div>
-      <!-- Single Stars -->
       <div class="card">
-        <label>Single Stars</label>
-        <div class="rarity-icon">⭐</div>
+        <label>
+          <span class="rarity-icon">⭐</span>
+          Single Stars
+        </label>
         <input type="number" id="1sCards" min="0" class="luck-input" />
       </div>
-      <!-- Quad Diamonds -->
       <div class="card">
-        <label>Quad Diamonds</label>
-        <div class="rarity-icon">♦♦♦♦</div>
+        <label>
+          <span class="rarity-icon">♦♦♦♦</span>
+          Quad Diamonds
+        </label>
         <input type="number" id="4dCards" min="0" class="luck-input" />
       </div>
-      <!-- God Packs -->
       <div class="card">
-        <label>God Packs</label>
-        <div class="rarity-icon god-packs-icon">
-          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png" alt="Master Ball Icon">
-        </div>
+        <label>
+          <span class="rarity-icon god-packs-icon">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png" alt="Master Ball Icon">
+          </span>
+          God Packs
+        </label>
         <input type="number" id="rareCards" min="0" class="luck-input" />
       </div>
     </div>
@@ -576,46 +572,47 @@
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const inputIds = ['crCards', '3sCards', '2sCards', '1sCards', '4dCards', 'rareCards', 'packsOpened'];
-      inputIds.forEach(id => {
-        const saved = localStorage.getItem(id);
-        if (saved !== null) {
-          document.getElementById(id).value = saved;
+    // Attach event listeners after elements load (this code is at the end of body, so it works)
+    const inputIds = ['crCards', '3sCards', '2sCards', '1sCards', '4dCards', 'rareCards', 'packsOpened'];
+    inputIds.forEach(id => {
+      const saved = localStorage.getItem(id);
+      if (saved !== null) {
+        document.getElementById(id).value = saved;
+      }
+    });
+    const inputs = document.querySelectorAll('.luck-input');
+    inputs.forEach((input) => {
+      input.addEventListener('input', () => {
+        const packs = parseInt(document.getElementById('packsOpened').value) || 0;
+        if (packs > 0) {
+          const maxPossible = packs * 5;
+          const totalCards = Array.from(inputs)
+            .filter(inp => inp.id !== 'packsOpened')
+            .reduce((sum, inp) => sum + (parseInt(inp.value) || 0), 0);
+          if (totalCards > maxPossible) {
+            document.getElementById('errorHandling').innerHTML =
+              `The total cards entered (${totalCards}) exceed the maximum of ${maxPossible} for ${packs} pack(s)!`;
+          } else {
+            document.getElementById('errorHandling').innerHTML = '';
+          }
         }
       });
-      const inputs = document.querySelectorAll('.luck-input');
-      inputs.forEach((input, idx, arr) => {
-        input.addEventListener('input', () => {
-          const packs = parseInt(document.getElementById('packsOpened').value) || 0;
-          if (packs > 0) {
-            const maxPossible = packs * 5;
-            const totalCards = Array.from(arr)
-                                  .filter(inp => inp.id !== 'packsOpened')
-                                  .reduce((sum, inp) => sum + (parseInt(inp.value) || 0), 0);
-            if (totalCards > maxPossible) {
-              document.getElementById('errorHandling').innerHTML =
-                `The total cards entered (${totalCards}) exceed the maximum of ${maxPossible} for ${packs} pack(s)!`;
-            } else {
-              document.getElementById('errorHandling').innerHTML = '';
-            }
-          }
-        });
-      });
-      const floatingElements = document.querySelectorAll('.floating-pokemon');
-      floatingElements.forEach(el => {
-        const duration = Math.floor(Math.random() * 8) + 8;
-        el.style.animationDuration = duration + 's';
-      });
-      document.getElementById('submitButton').addEventListener('click', calculateAllLuck);
-      document.getElementById('toggleInfo').addEventListener('click', function(){
-        const popup = document.getElementById('infoPopup');
-        popup.style.display = (popup.style.display === "block") ? "none" : "block";
-      });
+    });
+    const floatingElements = document.querySelectorAll('.floating-pokemon');
+    floatingElements.forEach(el => {
+      const duration = Math.floor(Math.random() * 8) + 8;
+      el.style.animationDuration = duration + 's';
     });
     
-    // spawnRaritySprite: topSprite parameter determines if sprite should be on top (result sprite)
-    function spawnRaritySprite(rarity, topSprite) {
+    function saveInputs() {
+      inputIds.forEach(id => {
+        const value = document.getElementById(id).value;
+        localStorage.setItem(id, value);
+      });
+    }
+    
+    // spawnRaritySprite: If called without a second parameter, it defaults to topSprite = true
+    function spawnRaritySprite(rarity, topSprite = true) {
       if (!raritySprites[rarity]) return;
       const img = document.createElement("img");
       img.src = raritySprites[rarity];
@@ -643,20 +640,21 @@
       }, 6000);
     }
     
+    const raritySprites = {
+      "👑 Crown Rare": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png",
+      "⭐⭐⭐ Triple Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png",
+      "⭐⭐ Double Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
+      "⭐ Single Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
+      "♦♦♦♦ Quadruple Diamond": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/249.png",
+      "God Packs": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png"
+    };
+    
     function spawnRandomBackgroundPokemon() {
       const keys = Object.keys(raritySprites);
       const randomKey = keys[Math.floor(Math.random() * keys.length)];
       spawnRaritySprite(randomKey, false);
     }
     setInterval(spawnRandomBackgroundPokemon, 2000);
-    
-    function saveInputs() {
-      const inputIds = ['crCards', '3sCards', '2sCards', '1sCards', '4dCards', 'rareCards', 'packsOpened'];
-      inputIds.forEach(id => {
-        const value = document.getElementById(id).value;
-        localStorage.setItem(id, value);
-      });
-    }
     
     const rarityDescriptionsOriginal = {
       ">=150": [
@@ -888,7 +886,7 @@
             luckDisplay = getLuckFactorWording(luckFactor);
             desc = getRarityLuckDescription(rawLuck, rarity);
             if (!spawnedRarities[rarity]) {
-              // Spawn the result sprite on top only
+              // Spawn result sprite on top
               spawnRaritySprite(rarity, true);
               spawnedRarities[rarity] = true;
             }
@@ -932,6 +930,14 @@
       if (finalScore >= 80) launchConfetti();
       else if (finalScore < 35) launchSadConfetti();
     }
+    
+    document.getElementById('submitButton').addEventListener('click', calculateAllLuck);
+    
+    // Toggle info popup
+    document.getElementById('toggleInfo').addEventListener('click', function(){
+      const popup = document.getElementById('infoPopup');
+      popup.style.display = (popup.style.display === "block") ? "none" : "block";
+    });
     
     function launchConfetti() {
       const colors = ["#f44336", "#e91e63", "#9c27b0", "#2196f3", "#03a9f4", "#00bcd4", "#4caf50", "#ffeb3b", "#ffc107", "#ff5722"];
