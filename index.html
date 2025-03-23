@@ -133,7 +133,7 @@
       text-align: center;
       opacity: 0;
       animation: fadeInUp 0.5s ease forwards;
-      display: flex;                /* uniform layout */
+      display: flex;
       flex-direction: column;
       align-items: center;
     }
@@ -147,7 +147,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 4px;              /* small gap between icon and text */
+      gap: 4px;
       margin-bottom: 8px;
       text-align: center;
     }
@@ -166,28 +166,32 @@
       outline: none;
       transform: scale(1.1);
     }
-
-    /* Icon sizing fix for emojis and images */
+    /* Icon sizing for rarity icons */
     .rarity-icon {
       display: inline-block;
-      font-size: 1.2em;  /* Adjust to your liking */
-      line-height: 1;    /* Helps keep them aligned uniformly */
+      font-size: 1em; /* reduced size for all except God Packs */
+      line-height: 1;
     }
-    /* If there's an <img> inside .rarity-icon, size it to match the emoji scale */
     .rarity-icon img {
-      width: 1em;       /* same as font-size */
+      width: 1em;
       height: 1em;
-      vertical-align: -0.15em; /* tweak to center image with text */
+      vertical-align: -0.15em;
     }
-
-    /* Packs card (no forced width) */
+    /* God Packs icon: increase size significantly */
+    .god-packs-icon {
+      font-size: 3em;
+    }
+    .god-packs-icon img {
+      width: 3em;
+      height: 3em;
+    }
+    /* Packs card: remove fixed width so it sizes naturally */
     .packs-card {
       background: #FFEBCD;
       border: 2px solid #FFCA28;
       border-radius: 10px;
       padding: 10px;
       text-align: center;
-      /* width: 150px;  <-- removed to avoid wide box */
       margin: 0 auto 20px auto;
       transition: transform 0.2s, box-shadow 0.2s;
     }
@@ -326,12 +330,11 @@
       font-style: italic;
       color: #555;
     }
-
     /* Toggle Switch & Info Icon: New Styles */
     .toggle-container {
       display: flex;
       flex-direction: column;
-      align-items: center;    /* horizontally center everything */
+      align-items: center; /* horizontally center everything */
       margin-top: 10px;
     }
     .toggle-info-row {
@@ -339,7 +342,7 @@
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      gap: 4px;               /* space between items */
+      gap: 4px; /* space between items */
     }
     .toggle-label {
       font-size: 0.7em;
@@ -409,7 +412,6 @@
     .switch input:checked + span:before {
       transform: translateX(16px);
     }
-
     /* Responsive layout for smaller screens */
     @media (max-width: 600px) {
       .container { width: 100%; padding: 10px; }
@@ -494,8 +496,8 @@
       <!-- God Packs -->
       <div class="card">
         <label>
-          <span class="rarity-icon">
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png" alt="Master Ball Icon">
+          <span class="rarity-icon god-packs-icon">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png" alt="God Packs Icon">
           </span>
           God Packs
         </label>
