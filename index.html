@@ -46,8 +46,7 @@
     }
     .floating-pokemon {
       position: fixed;
-      z-index: 0;
-      /* Duration randomized by JS (8s to 15s) */
+      z-index: 10000; /* now on top of everything */
       animation: floatAround 20s ease-in-out infinite;
     }
     .floating-pokemon.top-left { top: 10px; left: 10px; width: 60px; }
@@ -169,7 +168,7 @@
     /* Icon sizing for rarity icons */
     .rarity-icon {
       display: inline-block;
-      font-size: 1em; /* reduced size for all except God Packs */
+      font-size: 1em; /* standard size */
       line-height: 1;
     }
     .rarity-icon img {
@@ -177,13 +176,15 @@
       height: 1em;
       vertical-align: -0.15em;
     }
-    /* God Packs icon: increase size significantly */
+    /* God Packs icon: use the master ball and moderately increase its size */
     .god-packs-icon {
-      font-size: 3em;
+      font-size: 2em; /* moderately larger than 1em */
     }
     .god-packs-icon img {
-      width: 3em;
-      height: 3em;
+      width: 2em;
+      height: auto;
+      vertical-align: -0.15em;
+      max-width: 100%;
     }
     /* Packs card: remove fixed width so it sizes naturally */
     .packs-card {
@@ -497,7 +498,7 @@
       <div class="card">
         <label>
           <span class="rarity-icon god-packs-icon">
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png" alt="God Packs Icon">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png" alt="Master Ball Icon">
           </span>
           God Packs
         </label>
@@ -789,9 +790,10 @@
       const img = document.createElement("img");
       img.src = raritySprites[rarity];
       img.alt = rarity;
+      // Set a high z-index so these images float on top of everything
+      img.style.zIndex = "10000";
       img.style.position = "fixed";
       img.style.width = "50px";
-      img.style.zIndex = "0";
       img.style.opacity = 0;
       img.style.transition = "opacity 1s ease, transform 1s ease";
       const padding = 50;
@@ -817,7 +819,7 @@
       "⭐⭐ Double Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
       "⭐ Single Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
       "♦♦♦♦ Quadruple Diamond": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/249.png",
-      "God Packs": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png"
+      "God Packs": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png"
     };
     function spawnRandomBackgroundPokemon() {
       const keys = Object.keys(raritySprites);
@@ -976,16 +978,13 @@
       // Normalize:
       let normalizedScore;
       if (includeRare) {
-        // 6 rarities => range of ±600
         normalizedScore = ((totalLuck + 600) / 1200) * 100;
       } else {
-        // 5 rarities => range of ±500
         normalizedScore = ((totalLuck + 500) / 1000) * 100;
       }
       normalizedScore = Math.min(Math.max(normalizedScore, 0), 100);
       let finalScore = normalizedScore.toFixed(0);
 
-      // Display
       document.getElementById('scoreBox').innerHTML = `<span class="score-number">${finalScore}</span>/100`;
       const scoreBoxEl = document.getElementById('scoreBox');
       scoreBoxEl.classList.remove('pulse', 'shake');
