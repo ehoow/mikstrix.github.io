@@ -8,17 +8,16 @@
   <!-- Using Press Start 2P for a retro, Pokémon-inspired vibe -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
-    /* Background decal: subtle repeating Pokéball pattern */
+    /* Subtle Pokéball background */
     .bg-decal {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background: url('https://upload.wikimedia.org/wikipedia/commons/5/53/Pokeball.png') repeat;
       opacity: 0.05;
       z-index: -1;
     }
+
     /* Overall styling */
     body {
       font-family: 'Press Start 2P', cursive;
@@ -33,9 +32,9 @@
       overflow-x: hidden;
       position: relative;
     }
-    /* Ensure inputs and buttons use the same font */
     input, button { font-family: 'Press Start 2P', cursive; }
     .luck-input { font-size: 0.8em; }
+
     /* Floating Pokémon decorations */
     @keyframes floatAround {
       0% { transform: translate(0, 0); }
@@ -55,6 +54,7 @@
     .floating-pokemon.bottom-right { bottom: 10px; right: 10px; width: 60px; }
     .floating-pokemon.bottom-left { bottom: 10px; left: 10px; width: 60px; }
     .floating-pokemon img { width: 100%; height: auto; }
+
     /* Main container */
     .container {
       width: 100%;
@@ -70,13 +70,14 @@
       background-position: center;
       z-index: 1;
     }
+
     /* Title container with animated Pokéball icons */
     .title-container {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       margin-bottom: 10px;
-      flex-direction: column;
     }
     .title-row {
       display: flex;
@@ -101,7 +102,6 @@
       text-shadow: 2px 2px 0 #FFF, 4px 4px 0 #FFEB3B;
       text-align: center;
     }
-    /* Intro heading styling */
     .intro {
       background: rgba(255,255,255,0.8);
       padding: 10px 15px;
@@ -114,6 +114,7 @@
       color: #3E2723;
     }
     .section { margin-bottom: 20px; }
+
     /* Rarity cards grid */
     .rarity-grid {
       display: grid;
@@ -146,12 +147,7 @@
       margin-bottom: 5px;
       color: #424242;
     }
-    /* Quadruple Diamonds: use text-based icon */
-    .quad-diamonds-label {
-      font-size: 1em;
-      color: #424242;
-    }
-    /* Rare Packs: increase icon size */
+    .quad-diamonds-label { font-size: 1em; color: #424242; }
     .rare-label img {
       width: 40px;
       vertical-align: middle;
@@ -174,6 +170,8 @@
       outline: none;
       transform: scale(1.1);
     }
+
+    /* Packs Card */
     .packs-card {
       background: #FFEBCD;
       border: 2px solid #FFCA28;
@@ -194,6 +192,8 @@
       margin-bottom: 5px;
       color: #424242;
     }
+
+    /* Submit button */
     .button {
       padding: 12px 20px;
       font-size: 0.9em;
@@ -210,6 +210,8 @@
       margin-right: auto;
     }
     .button:hover { background-color: #B71C1C; }
+
+    /* Result & Score styling */
     .result { margin-top: 10px; font-size: 0.8em; color: #424242; }
     .score-highlight {
       font-size: 1.4em;
@@ -229,7 +231,6 @@
       margin-bottom: 10px;
     }
     ul { list-style: none; padding: 0; }
-    /* Slam animation for results */
     @keyframes slamIn {
       0% { opacity: 0; transform: scale(0.5) translateY(-50px); }
       60% { opacity: 1; transform: scale(1.1) translateY(10px); }
@@ -246,7 +247,6 @@
       opacity: 0;
       animation: slamIn 0.8s ease forwards;
     }
-    /* Staggered delays for results */
     #luckByRarity li:nth-child(1) { animation-delay: 1s; }
     #luckByRarity li:nth-child(2) { animation-delay: 2s; }
     #luckByRarity li:nth-child(3) { animation-delay: 3s; }
@@ -259,7 +259,11 @@
     .arrow { font-size: 1.5em; margin-left: 5px; }
     .arrow.green { color: green; }
     .arrow.red { color: red; }
-    #luckByRarity li em { color: #1976D2; display: block; margin-top: 10px; }
+    #luckByRarity li em {
+      color: #1976D2;
+      display: block;
+      margin-top: 10px;
+    }
     .mascot {
       text-align: center;
       font-size: 1.2em;
@@ -294,12 +298,22 @@
       pointer-events: none;
       border-radius: 2px;
     }
-    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
     .pulse { animation: pulse 1s infinite; }
-    @keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-5px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-5px); }
+      40% { transform: translateX(5px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
+    }
     .shake { animation: shake 0.6s; }
     #resultsSection { display: none; }
-    /* Revised "How It Works" section */
+
+    /* "How It Works" section */
     details {
       font-size: 0.8em;
       color: #3E2723;
@@ -314,33 +328,62 @@
       margin: 10px 0;
       line-height: 1.4;
     }
-    /* Add explanation for the new toggle */
     details ul li.toggle-info {
       margin-top: 5px;
       font-style: italic;
       color: #555;
     }
 
-    /* Toggle Switch & Info Icon: New Styles */
-    .toggle-container {
+    /* Toggle card with border below Rare Packs */
+    .toggle-card {
+      background: #FFEBCD;
+      border: 2px solid #FFCA28;
+      border-radius: 10px;
+      padding: 8px;
+      margin-top: 10px;
       display: flex;
       flex-direction: column;
-      align-items: center;    /* horizontally center everything */
-      margin-top: 10px;
-    }
-    .toggle-info-row {
-      display: flex;
-      flex-direction: row;
       align-items: center;
-      justify-content: center;
-      gap: 6px;               /* space between items */
     }
+    /* Narrow switch (40×20) */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px; height: 20px;
+      vertical-align: middle;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 20px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px; width: 14px;
+      left: 3px; bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    .switch input:checked + .slider { background-color: #D32F2F; }
+    .switch input:checked + .slider:before { transform: translateX(20px); }
+
     .toggle-label {
       font-size: 0.7em;
       margin: 0;
     }
+    .toggle-info-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px; /* slightly smaller gap */
+    }
     .info-icon {
-      margin-left: 0;
       font-size: 1em;
       cursor: pointer;
       vertical-align: middle;
@@ -366,8 +409,9 @@
   </style>
 </head>
 <body>
-  <!-- Background decal -->
+  <!-- Subtle background decal -->
   <div class="bg-decal"></div>
+
   <!-- Floating Pokémon decorations -->
   <div class="floating-pokemon top-left">
     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pikachu">
@@ -424,8 +468,8 @@
         </label>
         <input type="number" id="rareCards" min="0" class="luck-input" />
 
-        <!-- Updated Toggle Layout -->
-        <div class="toggle-container">
+        <!-- The toggle card with border & narrower switch -->
+        <div class="toggle-card">
           <div class="toggle-info-row">
             <label class="switch">
               <input type="checkbox" id="toggleRare" checked />
@@ -470,7 +514,7 @@
       <p><strong>Calculation Method:</strong></p>
       <ul>
         <li>
-          For each rarity, the <strong>Luck Factor (%)</strong> is computed as:  
+          For each rarity, the <strong>Luck Factor (%)</strong> is computed as:
           <span class="formula">(Actual Pulls ÷ Expected Pulls) × 100 – 100</span>
         </li>
         <li>A 0% Luck Factor means you pulled exactly as expected.</li>
@@ -498,15 +542,18 @@
   </div>
 
   <script>
-    // Save input values locally
+    // IDs for saving input values locally
     const inputIds = ['crCards', '3sCards', '2sCards', '1sCards', '4dCards', 'rareCards', 'packsOpened'];
+
     document.addEventListener("DOMContentLoaded", () => {
+      // Restore saved values
       inputIds.forEach(id => {
         const saved = localStorage.getItem(id);
         if (saved !== null) {
           document.getElementById(id).value = saved;
         }
       });
+
       // Real-time input validation
       const inputs = document.querySelectorAll('.luck-input');
       inputs.forEach((input, idx, arr) => {
@@ -515,10 +562,11 @@
           if (packs > 0) {
             const maxPossible = packs * 5;
             const totalCards = Array.from(arr)
-                                  .filter(inp => inp.id !== 'packsOpened')
-                                  .reduce((sum, inp) => sum + (parseInt(inp.value) || 0), 0);
+              .filter(inp => inp.id !== 'packsOpened')
+              .reduce((sum, inp) => sum + (parseInt(inp.value) || 0), 0);
+
             if (totalCards > maxPossible) {
-              document.getElementById('errorHandling').innerHTML = 
+              document.getElementById('errorHandling').innerHTML =
                 `The total cards entered (${totalCards}) exceed the maximum of ${maxPossible} for ${packs} pack(s)!`;
             } else {
               document.getElementById('errorHandling').innerHTML = '';
@@ -526,10 +574,11 @@
           }
         });
       });
+
       // Randomize animation durations for floating Pokémon (between 8s and 15s)
       const floatingElements = document.querySelectorAll('.floating-pokemon');
       floatingElements.forEach(el => {
-        const duration = Math.floor(Math.random() * 8) + 8; // 8s to 15s
+        const duration = Math.floor(Math.random() * 8) + 8; // 8..15
         el.style.animationDuration = duration + 's';
       });
     });
@@ -621,6 +670,7 @@
         "No Rare Pack cards—the gods of rarity were silent."
       ]
     };
+
     let rarityDescriptions = JSON.parse(JSON.stringify(rarityDescriptionsOriginal));
     function pickUniqueDescription(rangeKey) {
       if (!rarityDescriptions[rangeKey] || rarityDescriptions[rangeKey].length === 0) {
@@ -630,6 +680,7 @@
       const index = Math.floor(Math.random() * arr.length);
       return arr.splice(index, 1)[0];
     }
+
     function getRarityLuckDescription(score, rarityKey) {
       const luckScore = parseFloat(score);
       if (isNaN(luckScore)) return "";
@@ -648,6 +699,7 @@
       else if (luckScore >= 25) return pickUniqueDescription(">=25");
       else return pickUniqueDescription("else");
     }
+
     const overallBrackets = {
       ">=80": [
         { description: "Unstoppable—like Mewtwo at full power!", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png", alt: "Mewtwo" },
@@ -680,29 +732,18 @@
         { description: "Catastrophic—like Ditto failing to transform your fate.", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/132.png", alt: "Ditto" }
       ]
     };
-    function getOverallBracket(score) {
-      const s = parseFloat(score);
-      if (isNaN(s)) return null;
-      let key = "";
-      if (s >= 80) key = ">=80";
-      else if (s >= 65) key = ">=65";
-      else if (s >= 50) key = ">=50";
-      else if (s >= 35) key = ">=35";
-      else if (s >= 20) key = ">=20";
-      else key = "else";
-      const options = overallBrackets[key];
-      return options[Math.floor(Math.random() * options.length)];
-    }
-    function getLuckFactorWording(luckFactor) {
-      if (luckFactor > 0) {
-        return `You pulled <span class="score-number green">${luckFactor.toFixed(0)}%</span> more than expected. <span class="arrow green">↑</span>`;
-      } else if (luckFactor < 0) {
-        return `You pulled <span class="score-number red">${Math.abs(luckFactor).toFixed(0)}%</span> fewer than expected. <span class="arrow red">↓</span>`;
-      } else {
-        return `Exactly on the mark (as expected).`;
-      }
-    }
-    // Rarity sprite spawner
+
+    // Sprites for each rarity
+    const raritySprites = {
+      "👑 Crown Rare": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png",
+      "⭐⭐⭐ Triple Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png",
+      "⭐⭐ Double Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
+      "⭐ Single Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
+      "♦♦♦♦ Quadruple Diamond": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/249.png",
+      "Rare (God Pack)": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png"
+    };
+
+    // Spawn a single floating sprite
     function spawnRaritySprite(rarity) {
       if (!raritySprites[rarity]) return;
       const img = document.createElement("img");
@@ -730,22 +771,16 @@
         setTimeout(() => { if (img.parentNode) img.parentNode.removeChild(img); }, 1000);
       }, 6000);
     }
-    const raritySprites = {
-      "👑 Crown Rare": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png",
-      "⭐⭐⭐ Triple Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png",
-      "⭐⭐ Double Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
-      "⭐ Single Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-      "♦♦♦♦ Quadruple Diamond": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/249.png",
-      "Rare (God Pack)": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png"
-    };
+
+    // Spawn random background sprite every 2s
     function spawnRandomBackgroundPokemon() {
       const keys = Object.keys(raritySprites);
       const randomKey = keys[Math.floor(Math.random() * keys.length)];
       spawnRaritySprite(randomKey);
     }
-    setInterval(spawnRandomBackgroundPokemon, 2000); // more frequent spawns
+    setInterval(spawnRandomBackgroundPokemon, 2000);
 
-    // Confetti functions
+    // Confetti (happy)
     function launchConfetti() {
       const colors = ["#f44336", "#e91e63", "#9c27b0", "#2196f3", "#03a9f4", "#00bcd4", "#4caf50", "#ffeb3b", "#ffc107", "#ff5722"];
       const numPieces = 100;
@@ -759,7 +794,7 @@
         confetto.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         confetto.style.left = Math.random() * window.innerWidth + "px";
         confetto.style.top = "-20px";
-        const fallDuration = Math.random() * 4 + 3; 
+        const fallDuration = Math.random() * 4 + 3;
         confetto.style.transition = `top ${fallDuration}s linear, opacity 2s ease-in`;
         const drift = (Math.random() - 0.5) * 100;
         confetto.style.transform = `translateX(${drift}px) rotate(${Math.random() * 360}deg)`;
@@ -772,6 +807,7 @@
         }, (fallDuration + 3) * 1000);
       }
     }
+    // Confetti (sad)
     function launchSadConfetti() {
       const colors = ["#555", "#444", "#333", "#222", "#666", "#777"];
       const numDrops = 60;
@@ -813,6 +849,7 @@
         (parseInt(document.getElementById('1sCards').value) || 0) +
         (parseInt(document.getElementById('4dCards').value) || 0) +
         (parseInt(document.getElementById('rareCards').value) || 0);
+
       if (totalCardsPulled > packsOpened * 5) {
         document.getElementById('errorHandling').innerHTML =
           `Input Error: Total cards (${totalCardsPulled}) exceed maximum of ${packsOpened * 5} for ${packsOpened} pack(s).`;
@@ -841,7 +878,7 @@
         "♦♦♦♦ Quadruple Diamond": 0.0732,
         "Rare (God Pack)": 1/2000
       };
-      
+
       let resultsHTML = "<ul>";
       let totalLuck = 0;
       const packsOpened = parseInt(document.getElementById('packsOpened').value);
@@ -850,7 +887,6 @@
       // Check toggle
       const includeRare = document.getElementById('toggleRare').checked;
 
-      // Compute per-rarity
       for (let rarity in pulls) {
         let actual = pulls[rarity];
         let expected = pullRates[rarity] * packsOpened;
@@ -872,8 +908,8 @@
             }
           }
           contribution = ((actual - expected) / expected) * 100;
-          // If Rare is unchecked, ignore its contribution
           if (rarity === "Rare (God Pack)") {
+            // Only add if toggle is ON
             totalLuck += includeRare ? contribution : 0;
           } else {
             totalLuck += contribution;
@@ -883,7 +919,7 @@
         }
         resultsHTML += `
           <li>
-            <strong>${rarity}:</strong> Actual: <span class="score-number">${actual}</span>, 
+            <strong>${rarity}:</strong> Actual: <span class="score-number">${actual}</span>,
             Expected: <span class="score-number">${expected.toFixed(1)}</span><br><br>
             <strong>Luck Factor:</strong> ${luckDisplay}<br><br>
             <em>${desc}</em>
@@ -893,18 +929,18 @@
       document.getElementById('luckByRarity').innerHTML = resultsHTML;
 
       // Normalize:
+      // If Rare is included => 6 rarities => ±600
+      // If Rare is excluded => 5 rarities => ±500
       let normalizedScore;
       if (includeRare) {
-        // 6 rarities => range of ±600
         normalizedScore = ((totalLuck + 600) / 1200) * 100;
       } else {
-        // 5 rarities => range of ±500
         normalizedScore = ((totalLuck + 500) / 1000) * 100;
       }
       normalizedScore = Math.min(Math.max(normalizedScore, 0), 100);
       let finalScore = normalizedScore.toFixed(0);
 
-      // Display
+      // Display final
       document.getElementById('scoreBox').innerHTML = `<span class="score-number">${finalScore}</span>/100`;
       const scoreBoxEl = document.getElementById('scoreBox');
       scoreBoxEl.classList.remove('pulse', 'shake');
@@ -914,6 +950,7 @@
       document.getElementById('luckRating').innerHTML = overall.description;
       document.getElementById('pokemonImage').innerHTML = `<img class="result-pokemon" src="${overall.image}" alt="${overall.alt}" title="${overall.alt}" />`;
       document.getElementById('resultsSection').style.display = "block";
+
       if (finalScore >= 80) launchConfetti();
       else if (finalScore < 35) launchSadConfetti();
     }
