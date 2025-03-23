@@ -133,6 +133,10 @@
       text-align: center;
       opacity: 0;
       animation: fadeInUp 0.5s ease forwards;
+      /* For uniform alignment of label & input: */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .rarity-grid .card:nth-child(1) { animation-delay: 0.2s; }
     .rarity-grid .card:nth-child(2) { animation-delay: 0.4s; }
@@ -140,25 +144,27 @@
     .rarity-grid .card:nth-child(4) { animation-delay: 0.8s; }
     .rarity-grid .card:nth-child(5) { animation-delay: 1s; }
     .rarity-grid .card:nth-child(6) { animation-delay: 1.2s; }
-    .card label {
-      font-size: 1em;
-      display: block;
-      margin-bottom: 5px;
-      color: #424242;
+    .rarity-grid .card label {
+      /* Center icon/title horizontally, with a small gap if there's an icon. */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 8px;
+      text-align: center;
     }
     /* Quadruple Diamonds: use text-based icon */
     .quad-diamonds-label {
       font-size: 1em;
       color: #424242;
     }
-    /* God Packs: increase icon size */
+    /* God Packs: bigger icon, but remove default margin so we rely on 'gap' */
     .rare-label img {
       width: 40px;
       vertical-align: middle;
-      margin-right: 5px;
+      margin: 0; /* overridden so we can rely on gap instead */
     }
-    .card input,
-    .packs-card input {
+    .card input {
       width: 60px;
       padding: 5px;
       font-size: 1.1em;
@@ -167,8 +173,7 @@
       text-align: center;
       transition: transform 0.2s;
     }
-    .card input:focus,
-    .packs-card input:focus {
+    .card input:focus {
       border-color: #D32F2F;
       box-shadow: 0 0 5px rgba(211,47,47,0.5);
       outline: none;
@@ -361,6 +366,7 @@
       border-radius: 10px;
       padding: 10px;
       margin-top: 10px;
+      margin-bottom: 20px; /* Extra spacing before Packs Opened */
     }
     /* Toggle Switch Style - Smaller Width */
     .switch {
@@ -472,8 +478,8 @@
         <input type="number" id="rareCards" min="0" class="luck-input" />
       </div>
     </div>
-    
-    <!-- Toggle Section Container (placed outside the God Packs card) -->
+
+    <!-- Toggle Section Container (outside the God Packs card) -->
     <div class="toggle-section-container">
       <div class="toggle-container">
         <div class="toggle-info-row">
