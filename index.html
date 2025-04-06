@@ -35,9 +35,11 @@
     }
     input, button { font-family: 'Press Start 2P', cursive; }
     .luck-input { font-size: 0.8em; width: 60px; }
-    /* Ensure all rarity icons are uniform and stand out */
+    /* Updated rarity icon styling using inline-flex for proper alignment */
     .rarity-icon {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       min-width: 1.5em;
       text-align: center;
       margin-right: 0.5em;
@@ -46,11 +48,11 @@
       border-radius: 5px;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     }
-    /* New rule to anchor icons within their borders */
     .rarity-icon img {
       display: block;
       margin: 0 auto;
       vertical-align: middle;
+      max-height: 1.5em;
     }
     @keyframes floatAround {
       0% { transform: translate(0, 0); }
@@ -173,7 +175,7 @@
       transform: scale(1.1);
     }
     .god-packs-icon img {
-      width: 2em; /* Increased from 1.5em */
+      width: 2em;
       height: auto;
     }
     .packs-card {
@@ -364,7 +366,7 @@
 <body>
   <!-- Background decal -->
   <div class="bg-decal"></div>
-  <!-- Floating Pokémon decorations (sprites now appear at 40px width) -->
+  <!-- Floating Pokémon decorations -->
   <div class="floating-pokemon top-left">
     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pikachu">
   </div>
@@ -465,7 +467,7 @@
       <input type="number" id="shiningPacksOpened" min="0" class="luck-input" />
     </div>
 
-    <!-- Toggle Section Container (using original switch markup) -->
+    <!-- Toggle Section Container -->
     <div class="toggle-section-container">
       <div class="toggle-container">
         <div class="toggle-info-row">
@@ -489,7 +491,7 @@
           <span class="info-icon" id="toggleShinyInfo" tabindex="0">&#9432;</span>
         </div>
         <div class="info-popup" id="toggleShinyPopup">
-          When enabled, Shining Revelry pack pulls (the new shiny rarities) affect your overall score with their full luck factor.
+          When enabled, Shining Revelry pack pulls affect your overall score with their full luck factor.
           When disabled, they are excluded from the overall calculation.
         </div>
       </div>
@@ -543,22 +545,16 @@
       </p>
     </details>
 
-    <!-- New "How to Get Your Inputs" Guide Section -->
+    <!-- How to Get Your Inputs Section -->
     <details>
       <summary>How to Get Your Inputs</summary>
       <p><strong>How to Record Your Data:</strong></p>
       <ul>
         <li>
-          <strong>Total Packs Opened:</strong> Locate this number in your game’s statistics or main menu where your pack-opening history is displayed.
+          <strong>Total Packs Opened:</strong> Tap the Medals icon from the main menu and locate the medal labeled “Packs Opened.” This number represents your total packs opened. Alternatively, if you use pack points, divide your total pack points by 5.
         </li>
         <li>
-          <strong>Shining Revelry Packs Opened:</strong> These special packs appear during limited-time events—check your event summary or special offers section.
-        </li>
-        <li>
-          <strong>Card Pulls:</strong> After opening a pack, the game typically shows a summary of your pulls. Record the number of Crown Rares, Triple Stars, Double Stars, Single Stars, Quad Diamonds, and special pulls (God Packs, Shiny One Star, and Shiny Two Star) as shown in the pull log.
-        </li>
-        <li>
-          Make sure your numbers match the game’s display for an accurate luck calculation!
+          <strong>Shining Revelry Packs Opened:</strong> Tap the Medals icon and find the medal labeled “Shining Revelry” for your booster pack count. <em>Note:</em> If you have used pack points for Shining Revelry, this count may not be accurate – instead, determine the total cards collected in Shining Revelry and then divide that number by 5.
         </li>
       </ul>
     </details>
@@ -605,7 +601,6 @@
       });
     }
     
-    // spawnRaritySprite: creates a floating sprite for a given rarity (now at 40px width)
     function spawnRaritySprite(rarity, topSprite = true) {
       if (!raritySprites[rarity]) return;
       const img = document.createElement("img");
@@ -886,7 +881,6 @@
       const includeRare = document.getElementById('toggleRare').checked;
       const includeShiny = document.getElementById('toggleShiny').checked;
       for (let rarity in pulls) {
-        // Use shiningPacksOpened for shiny rarities; otherwise use packsOpened
         let expected = (rarity === "✨ Shiny One Star" || rarity === "💫 Shiny Two Star")
                          ? pullRates[rarity] * shiningPacksOpened
                          : pullRates[rarity] * packsOpened;
@@ -929,7 +923,6 @@
       }
       resultsHTML += "</ul>";
       document.getElementById('luckByRarity').innerHTML = resultsHTML;
-      // Dynamically assign animation delays to each result item
       const resultItems = document.querySelectorAll('#luckByRarity li');
       resultItems.forEach((item, index) => {
          item.style.animationDelay = (index + 1) + "s";
@@ -957,7 +950,6 @@
     
     document.getElementById('submitButton').addEventListener('click', calculateAllLuck);
     
-    // Toggle info popups for God Packs and Shining Revelry toggles
     document.getElementById('toggleInfo').addEventListener('click', function(){
       const popup = document.getElementById('infoPopup');
       popup.style.display = (popup.style.display === "block") ? "none" : "block";
