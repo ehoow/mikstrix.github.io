@@ -35,6 +35,13 @@
     }
     input, button { font-family: 'Press Start 2P', cursive; }
     .luck-input { font-size: 0.8em; width: 60px; }
+    /* Ensure all rarity icons are uniform and spaced */
+    .rarity-icon {
+      display: inline-block;
+      min-width: 1.5em;
+      text-align: center;
+      margin-right: 0.5em;
+    }
     @keyframes floatAround {
       0% { transform: translate(0, 0); }
       25% { transform: translate(30px, -20px); }
@@ -131,15 +138,6 @@
       flex-direction: column;
       align-items: center;
     }
-    /* Adjusted animation delays for 8 cards */
-    .rarity-grid .card:nth-child(1) { animation-delay: 0.2s; }
-    .rarity-grid .card:nth-child(2) { animation-delay: 0.4s; }
-    .rarity-grid .card:nth-child(3) { animation-delay: 0.6s; }
-    .rarity-grid .card:nth-child(4) { animation-delay: 0.8s; }
-    .rarity-grid .card:nth-child(5) { animation-delay: 1s; }
-    .rarity-grid .card:nth-child(6) { animation-delay: 1.2s; }
-    .rarity-grid .card:nth-child(7) { animation-delay: 1.4s; }
-    .rarity-grid .card:nth-child(8) { animation-delay: 1.6s; }
     .rarity-grid .card label {
       display: flex;
       align-items: center;
@@ -148,12 +146,6 @@
       margin-bottom: 8px;
       text-align: center;
       font-size: 0.8em;
-    }
-    .rarity-grid .card .rarity-icon {
-      display: block;
-      margin: 0 auto 8px;
-      max-width: 100%;
-      line-height: 1;
     }
     .rarity-grid .card input {
       width: 60px;
@@ -170,16 +162,6 @@
       outline: none;
       transform: scale(1.1);
     }
-    .rarity-icon {
-      font-size: 1em;
-      line-height: 1;
-    }
-    .rarity-icon img {
-      width: 1em;
-      height: 1em;
-      vertical-align: -0.15em;
-    }
-    /* Reduced god pack icon size */
     .god-packs-icon img {
       width: 1.5em;
       height: auto;
@@ -237,16 +219,25 @@
       text-shadow: 1px 1px 0 #FFF;
       margin-bottom: 10px;
     }
-    ul { list-style: none; padding: 0; }
-    /* Updated animation delays for result list items (supporting 8 items) */
-    #luckByRarity li:nth-child(1) { animation-delay: 1s; }
-    #luckByRarity li:nth-child(2) { animation-delay: 2s; }
-    #luckByRarity li:nth-child(3) { animation-delay: 3s; }
-    #luckByRarity li:nth-child(4) { animation-delay: 4s; }
-    #luckByRarity li:nth-child(5) { animation-delay: 5s; }
-    #luckByRarity li:nth-child(6) { animation-delay: 6s; }
-    #luckByRarity li:nth-child(7) { animation-delay: 7s; }
-    #luckByRarity li:nth-child(8) { animation-delay: 8s; }
+    /* Remove any bullet points from result lists */
+    ul { list-style: none !important; padding: 0; }
+    /* Result list items */
+    #luckByRarity li {
+      background: #FFFDE7;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 2px dashed #FFCA28;
+      border-radius: 8px;
+      font-size: 0.8em;
+      opacity: 0;
+      animation: slamIn 0.8s ease forwards;
+    }
+    @keyframes slamIn {
+      0% { opacity: 0; transform: scale(0.5) translateY(-50px); }
+      60% { opacity: 1; transform: scale(1.1) translateY(10px); }
+      80% { opacity: 1; transform: scale(0.95) translateY(0); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
     .score-number { font-weight: bold; margin: 0 3px; }
     .score-number.green { color: green; }
     .score-number.red { color: red; }
@@ -312,11 +303,18 @@
       font-style: italic;
       color: #555;
     }
+    .toggle-section-container {
+      border: 1px solid #FFCA28;
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
     .toggle-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 10px;
+      gap: 10px;
     }
     .toggle-info-row {
       display: flex;
@@ -345,52 +343,6 @@
       margin-top: 5px;
       text-align: left;
     }
-    .toggle-section-container {
-      border: 1px solid #FFCA28;
-      border-radius: 10px;
-      padding: 10px;
-      margin-top: 10px;
-      margin-bottom: 20px;
-    }
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 30px;
-      height: 16px;
-    }
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .switch span {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: .4s;
-      border-radius: 16px;
-    }
-    .switch span:before {
-      position: absolute;
-      content: "";
-      height: 12px;
-      width: 12px;
-      left: 2px;
-      bottom: 2px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
-    .switch input:checked + span {
-      background-color: #D32F2F;
-    }
-    .switch input:checked + span:before {
-      transform: translateX(16px);
-    }
     @media (max-width: 600px) {
       .container { width: 100%; padding: 10px; }
       .page-title { font-size: 1.5em; }
@@ -402,7 +354,7 @@
 <body>
   <!-- Background decal -->
   <div class="bg-decal"></div>
-  <!-- Floating Pokémon decorations -->
+  <!-- Floating Pokémon decorations (sprites are now 40px wide) -->
   <div class="floating-pokemon top-left">
     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pikachu">
   </div>
@@ -425,7 +377,7 @@
         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pokéball Icon">
       </div>
       <div class="intro">
-        Enter your card pull numbers, the number of total packs opened, and the number of Shining Revelry packs opened to discover how lucky your pulls are!
+        Enter your card pull numbers, the total packs opened, and the Shining Revelry packs opened to discover your luck!
       </div>
     </div>
 
@@ -518,6 +470,18 @@
           When enabled, God Pack pulls affect your overall score with their full luck factor.
           When disabled, they are excluded from the overall calculation.
         </div>
+        <div class="toggle-info-row">
+          <label class="switch">
+            <input type="checkbox" id="toggleShiny" checked />
+            <span class="switch"></span>
+          </label>
+          <span class="toggle-label">Include Shining Revelry Packs in Score</span>
+          <span class="info-icon" id="toggleShinyInfo" tabindex="0">&#9432;</span>
+        </div>
+        <div class="info-popup" id="toggleShinyPopup">
+          When enabled, Shining Revelry pack pulls (the new shiny rarities) affect your overall score with their full luck factor.
+          When disabled, they are excluded from the overall calculation.
+        </div>
       </div>
     </div>
 
@@ -560,9 +524,7 @@
         <li>Shiny One Star: 2.857%</li>
         <li>Shiny Two Star: 1.333%</li>
         <li class="toggle-info">
-          <strong>Toggle:</strong> The "Include God Packs in Score" switch controls God Pack pulls’ contribution.
-          When enabled, God Pack pulls affect the overall score (normalized over 1200).
-          When disabled, they are excluded (normalized over 1000).
+          <strong>Toggle:</strong> The "Include God Packs in Score" and "Include Shining Revelry Packs in Score" switches control whether those pulls are included.
         </li>
       </ul>
       <p>
@@ -613,14 +575,14 @@
       });
     }
     
-    // spawnRaritySprite: creates a floating sprite for a given rarity
+    // spawnRaritySprite: creates a floating sprite for a given rarity, now with width 40px.
     function spawnRaritySprite(rarity, topSprite = true) {
       if (!raritySprites[rarity]) return;
       const img = document.createElement("img");
       img.src = raritySprites[rarity];
       img.alt = rarity;
       img.style.position = "fixed";
-      img.style.width = "50px";
+      img.style.width = "40px";
       img.style.opacity = 0;
       img.style.transition = "opacity 1s ease, transform 1s ease";
       img.style.zIndex = topSprite ? "10000" : "0";
@@ -892,6 +854,7 @@
       let totalLuck = 0;
       const spawnedRarities = {};
       const includeRare = document.getElementById('toggleRare').checked;
+      const includeShiny = document.getElementById('toggleShiny').checked;
       for (let rarity in pulls) {
         // Use shiningPacksOpened for shiny rarities; otherwise use packsOpened
         let expected = (rarity === "✨ Shiny One Star" || rarity === "💫 Shiny Two Star")
@@ -918,6 +881,8 @@
           contribution = ((actual - expected) / expected) * 100;
           if (rarity === "God Packs") {
             totalLuck += includeRare ? contribution : 0;
+          } else if (rarity === "✨ Shiny One Star" || rarity === "💫 Shiny Two Star") {
+            totalLuck += includeShiny ? contribution : 0;
           } else {
             totalLuck += contribution;
           }
@@ -934,6 +899,11 @@
       }
       resultsHTML += "</ul>";
       document.getElementById('luckByRarity').innerHTML = resultsHTML;
+      // Dynamically assign animation delays to each result item
+      const resultItems = document.querySelectorAll('#luckByRarity li');
+      resultItems.forEach((item, index) => {
+         item.style.animationDelay = (index + 1) + "s";
+      });
       let normalizedScore;
       if (includeRare) {
         normalizedScore = ((totalLuck + 600) / 1200) * 100;
@@ -957,9 +927,13 @@
     
     document.getElementById('submitButton').addEventListener('click', calculateAllLuck);
     
-    // Toggle info popup
+    // Toggle info popups for God Packs and Shining Revelry toggles
     document.getElementById('toggleInfo').addEventListener('click', function(){
       const popup = document.getElementById('infoPopup');
+      popup.style.display = (popup.style.display === "block") ? "none" : "block";
+    });
+    document.getElementById('toggleShinyInfo').addEventListener('click', function(){
+      const popup = document.getElementById('toggleShinyPopup');
       popup.style.display = (popup.style.display === "block") ? "none" : "block";
     });
     
