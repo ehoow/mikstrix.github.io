@@ -33,10 +33,8 @@
       overflow-x: hidden;
       position: relative;
     }
-    /* Ensure inputs and buttons use the same font */
     input, button { font-family: 'Press Start 2P', cursive; }
     .luck-input { font-size: 0.8em; }
-    /* Floating Pokémon decorations */
     @keyframes floatAround {
       0% { transform: translate(0, 0); }
       25% { transform: translate(30px, -20px); }
@@ -46,7 +44,7 @@
     }
     .floating-pokemon {
       position: fixed;
-      z-index: 10000; /* These sprites float on top (if you need them on top) */
+      z-index: 10000;
       animation: floatAround 20s ease-in-out infinite;
     }
     .floating-pokemon.top-left { top: 10px; left: 10px; width: 60px; }
@@ -54,7 +52,6 @@
     .floating-pokemon.bottom-right { bottom: 10px; right: 10px; width: 60px; }
     .floating-pokemon.bottom-left { bottom: 10px; left: 10px; width: 60px; }
     .floating-pokemon img { width: 100%; height: auto; }
-    /* Main container */
     .container {
       width: 100%;
       max-width: 600px;
@@ -69,7 +66,6 @@
       background-position: center;
       z-index: 1;
     }
-    /* Title container with animated Pokéball icons */
     .title-container {
       display: flex;
       align-items: center;
@@ -100,7 +96,6 @@
       text-shadow: 2px 2px 0 #FFF, 4px 4px 0 #FFEB3B;
       text-align: center;
     }
-    /* Intro heading styling */
     .intro {
       background: rgba(255,255,255,0.8);
       padding: 10px 15px;
@@ -113,7 +108,6 @@
       color: #3E2723;
     }
     .section { margin-bottom: 20px; }
-    /* Rarity cards grid */
     .rarity-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -143,6 +137,8 @@
     .rarity-grid .card:nth-child(4) { animation-delay: 0.8s; }
     .rarity-grid .card:nth-child(5) { animation-delay: 1s; }
     .rarity-grid .card:nth-child(6) { animation-delay: 1.2s; }
+    .rarity-grid .card:nth-child(7) { animation-delay: 1.4s; }
+    .rarity-grid .card:nth-child(8) { animation-delay: 1.6s; }
     .rarity-grid .card label {
       display: flex;
       align-items: center;
@@ -182,7 +178,6 @@
       height: 1em;
       vertical-align: -0.15em;
     }
-    /* Enlarged God Packs icon */
     .god-packs-icon {
       font-size: 2.5em;
     }
@@ -496,6 +491,27 @@
         </label>
         <input type="number" id="rareCards" min="0" class="luck-input" />
       </div>
+      <!-- New shiny rarity inputs -->
+      <div class="card">
+        <label>
+          <span class="rarity-icon">✨</span>
+          Shiny One Star
+        </label>
+        <input type="number" id="shiny1Cards" min="0" class="luck-input" />
+      </div>
+      <div class="card">
+        <label>
+          <span class="rarity-icon">💫</span>
+          Shiny Two Star
+        </label>
+        <input type="number" id="shiny2Cards" min="0" class="luck-input" />
+      </div>
+    </div>
+
+    <!-- Packs Opened -->
+    <div class="packs-card section">
+      <label>Packs Opened</label>
+      <input type="number" id="packsOpened" min="0" class="luck-input" />
     </div>
 
     <!-- Toggle Section Container -->
@@ -514,12 +530,6 @@
           When disabled, they are excluded from the overall calculation.
         </div>
       </div>
-    </div>
-
-    <!-- Packs Opened -->
-    <div class="packs-card section">
-      <label>Packs Opened</label>
-      <input type="number" id="packsOpened" min="0" class="luck-input" />
     </div>
 
     <button class="button" id="submitButton">Submit</button>
@@ -558,6 +568,8 @@
         <li>Single Stars: 12.7%</li>
         <li>Quad Diamonds: 7.32%</li>
         <li>God Packs: 0.05%</li>
+        <li>Shiny One Star: 2.857%</li>
+        <li>Shiny Two Star: 1.333%</li>
         <li class="toggle-info">
           <strong>Toggle:</strong> The "Include God Packs in Score" switch controls God Pack pulls’ contribution.
           When enabled, God Pack pulls affect the overall score (normalized over 1200).
@@ -572,8 +584,8 @@
   </div>
 
   <script>
-    // Attach event listeners after elements load (this code is at the end of body, so it works)
-    const inputIds = ['crCards', '3sCards', '2sCards', '1sCards', '4dCards', 'rareCards', 'packsOpened'];
+    // Retrieve and save inputs
+    const inputIds = ['crCards', '3sCards', '2sCards', '1sCards', '4dCards', 'rareCards', 'shiny1Cards', 'shiny2Cards', 'packsOpened'];
     inputIds.forEach(id => {
       const saved = localStorage.getItem(id);
       if (saved !== null) {
@@ -598,6 +610,7 @@
         }
       });
     });
+
     const floatingElements = document.querySelectorAll('.floating-pokemon');
     floatingElements.forEach(el => {
       const duration = Math.floor(Math.random() * 8) + 8;
@@ -611,7 +624,7 @@
       });
     }
     
-    // spawnRaritySprite: If called without a second parameter, it defaults to topSprite = true
+    // spawnRaritySprite: creates a floating sprite for a given rarity
     function spawnRaritySprite(rarity, topSprite = true) {
       if (!raritySprites[rarity]) return;
       const img = document.createElement("img");
@@ -641,12 +654,14 @@
     }
     
     const raritySprites = {
-      "👑 Crown Rare": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png",
+      "👑 Crown Rares": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png",
       "⭐⭐⭐ Triple Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png",
       "⭐⭐ Double Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
       "⭐ Single Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
       "♦♦♦♦ Quadruple Diamond": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/249.png",
-      "God Packs": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png"
+      "God Packs": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png",
+      "✨ Shiny One Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/151.png",
+      "💫 Shiny Two Star": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/150.png"
     };
     
     function spawnRandomBackgroundPokemon() {
@@ -705,7 +720,7 @@
     };
     
     const zeroRarityDescriptions = {
-      "👑 Crown Rare": [
+      "👑 Crown Rares": [
         "No Crown Rares—every legend has an off day.",
         "Zero Crown Rares—the pinnacle remained elusive.",
         "No Crown Rares—the highest tier slipped by."
@@ -734,6 +749,16 @@
         "No God Pack cards—the ultimate rarity was completely missed.",
         "Zero God Pack cards—the jackpot remained locked.",
         "No God Pack cards—the gods of rarity were silent."
+      ],
+      "✨ Shiny One Star": [
+        "No Shiny One Star pulls—today the sparkle was missing.",
+        "Zero Shiny One Stars—the glimmer was nowhere to be found.",
+        "No Shiny One Stars—a dim day for shiny pulls."
+      ],
+      "💫 Shiny Two Star": [
+        "No Shiny Two Star pulls—the rare shine eluded you.",
+        "Zero Shiny Two Stars—the glow was absent.",
+        "No Shiny Two Stars—a missed opportunity for extra shine."
       ]
     };
     
@@ -836,7 +861,9 @@
         (parseInt(document.getElementById('2sCards').value) || 0) +
         (parseInt(document.getElementById('1sCards').value) || 0) +
         (parseInt(document.getElementById('4dCards').value) || 0) +
-        (parseInt(document.getElementById('rareCards').value) || 0);
+        (parseInt(document.getElementById('rareCards').value) || 0) +
+        (parseInt(document.getElementById('shiny1Cards').value) || 0) +
+        (parseInt(document.getElementById('shiny2Cards').value) || 0);
       if (totalCardsPulled > packsOpened * 5) {
         document.getElementById('errorHandling').innerHTML =
           `Input Error: Total cards (${totalCardsPulled}) exceed maximum of ${packsOpened * 5} for ${packsOpened} pack(s).`;
@@ -855,7 +882,9 @@
         "⭐⭐ Double Star": parseInt(document.getElementById('2sCards').value) || 0,
         "⭐ Single Star": parseInt(document.getElementById('1sCards').value) || 0,
         "♦♦♦♦ Quadruple Diamond": parseInt(document.getElementById('4dCards').value) || 0,
-        "God Packs": parseInt(document.getElementById('rareCards').value) || 0
+        "God Packs": parseInt(document.getElementById('rareCards').value) || 0,
+        "✨ Shiny One Star": parseInt(document.getElementById('shiny1Cards').value) || 0,
+        "💫 Shiny Two Star": parseInt(document.getElementById('shiny2Cards').value) || 0
       };
       const pullRates = {
         "👑 Crown Rares": 0.00193,
@@ -863,7 +892,9 @@
         "⭐⭐ Double Star": 0.0255,
         "⭐ Single Star": 0.127,
         "♦♦♦♦ Quadruple Diamond": 0.0732,
-        "God Packs": 1/2000
+        "God Packs": 1/2000,
+        "✨ Shiny One Star": 0.02857,
+        "💫 Shiny Two Star": 0.01333
       };
       let resultsHTML = "<ul>";
       let totalLuck = 0;
@@ -886,7 +917,6 @@
             luckDisplay = getLuckFactorWording(luckFactor);
             desc = getRarityLuckDescription(rawLuck, rarity);
             if (!spawnedRarities[rarity]) {
-              // Spawn result sprite on top
               spawnRaritySprite(rarity, true);
               spawnedRarities[rarity] = true;
             }
