@@ -1,6 +1,9 @@
 MIT License
 
-Copyright (c) [2025] [Michael Gulliver]
+Copyright (c) 2025 Michael Gulliver
+
+Based on the work of PorygonThree 
+(https://github.com/PorygonThree/ptcgp-luck-calculator)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
