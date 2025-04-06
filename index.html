@@ -35,12 +35,16 @@
     }
     input, button { font-family: 'Press Start 2P', cursive; }
     .luck-input { font-size: 0.8em; width: 60px; }
-    /* Ensure all rarity icons are uniform and spaced */
+    /* Ensure all rarity icons are uniform and stand out */
     .rarity-icon {
       display: inline-block;
       min-width: 1.5em;
       text-align: center;
       margin-right: 0.5em;
+      background: rgba(255,255,255,0.8);
+      padding: 0.2em;
+      border-radius: 5px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     }
     @keyframes floatAround {
       0% { transform: translate(0, 0); }
@@ -163,7 +167,7 @@
       transform: scale(1.1);
     }
     .god-packs-icon img {
-      width: 1.5em;
+      width: 2em; /* Increased from 1.5em */
       height: auto;
     }
     .packs-card {
@@ -219,7 +223,7 @@
       text-shadow: 1px 1px 0 #FFF;
       margin-bottom: 10px;
     }
-    /* Remove any bullet points from result lists */
+    /* Remove bullet points from results */
     ul { list-style: none !important; padding: 0; }
     /* Result list items */
     #luckByRarity li {
@@ -354,7 +358,7 @@
 <body>
   <!-- Background decal -->
   <div class="bg-decal"></div>
-  <!-- Floating Pokémon decorations (sprites are now 40px wide) -->
+  <!-- Floating Pokémon decorations (sprites now appear at 40px width) -->
   <div class="floating-pokemon top-left">
     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pikachu">
   </div>
@@ -449,13 +453,13 @@
       <label>Total Packs Opened</label>
       <input type="number" id="packsOpened" min="0" class="luck-input" />
     </div>
-    <!-- New: Shining Revelry Packs Opened -->
+    <!-- Shining Revelry Packs Opened -->
     <div class="packs-card section">
       <label>Shining Revelry Packs Opened</label>
       <input type="number" id="shiningPacksOpened" min="0" class="luck-input" />
     </div>
 
-    <!-- Toggle Section Container -->
+    <!-- Toggle Section Container (using original switch markup) -->
     <div class="toggle-section-container">
       <div class="toggle-container">
         <div class="toggle-info-row">
@@ -575,7 +579,7 @@
       });
     }
     
-    // spawnRaritySprite: creates a floating sprite for a given rarity, now with width 40px.
+    // spawnRaritySprite: creates a floating sprite for a given rarity (now at 40px width)
     function spawnRaritySprite(rarity, topSprite = true) {
       if (!raritySprites[rarity]) return;
       const img = document.createElement("img");
