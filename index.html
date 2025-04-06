@@ -231,9 +231,7 @@
       text-shadow: 1px 1px 0 #FFF;
       margin-bottom: 10px;
     }
-    /* Remove bullet points from results */
     ul { list-style: none !important; padding: 0; }
-    /* Result list items */
     #luckByRarity li {
       background: #FFFDE7;
       margin-bottom: 10px;
@@ -396,42 +394,42 @@
     <!-- Rarity Inputs -->
     <div class="rarity-grid section">
       <div class="card">
-        <label>
+        <label data-rarity="Crown Rares">
           <span class="rarity-icon">👑</span>
           Crown Rares
         </label>
         <input type="number" id="crCards" min="0" class="luck-input" />
       </div>
       <div class="card">
-        <label>
+        <label data-rarity="Triple Stars">
           <span class="rarity-icon">⭐⭐⭐</span>
           Triple Stars
         </label>
         <input type="number" id="3sCards" min="0" class="luck-input" />
       </div>
       <div class="card">
-        <label>
+        <label data-rarity="Double Stars">
           <span class="rarity-icon">⭐⭐</span>
           Double Stars
         </label>
         <input type="number" id="2sCards" min="0" class="luck-input" />
       </div>
       <div class="card">
-        <label>
+        <label data-rarity="Single Stars">
           <span class="rarity-icon">⭐</span>
           Single Stars
         </label>
         <input type="number" id="1sCards" min="0" class="luck-input" />
       </div>
       <div class="card">
-        <label>
+        <label data-rarity="Quad Diamonds">
           <span class="rarity-icon">♦♦♦♦</span>
           Quad Diamonds
         </label>
         <input type="number" id="4dCards" min="0" class="luck-input" />
       </div>
       <div class="card">
-        <label>
+        <label data-rarity="God Packs">
           <span class="rarity-icon god-packs-icon">
             <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png" alt="Master Ball Icon">
           </span>
@@ -439,16 +437,15 @@
         </label>
         <input type="number" id="rareCards" min="0" class="luck-input" />
       </div>
-      <!-- New shiny rarity inputs -->
       <div class="card">
-        <label>
+        <label data-rarity="Shiny One Star">
           <span class="rarity-icon">✨</span>
           Shiny One Star
         </label>
         <input type="number" id="shiny1Cards" min="0" class="luck-input" />
       </div>
       <div class="card">
-        <label>
+        <label data-rarity="Shiny Two Star">
           <span class="rarity-icon">💫</span>
           Shiny Two Star
         </label>
@@ -461,7 +458,6 @@
       <label>Total Packs Opened</label>
       <input type="number" id="packsOpened" min="0" class="luck-input" />
     </div>
-    <!-- Shining Revelry Packs Opened -->
     <div class="packs-card section">
       <label>Shining Revelry Packs Opened</label>
       <input type="number" id="shiningPacksOpened" min="0" class="luck-input" />
@@ -545,22 +541,22 @@
       </p>
     </details>
 
- <!-- How to Get Your Inputs Section -->
-<details>
-  <summary>How to Get Your Inputs</summary>
-  <p><strong>How to Record Your Data:</strong></p>
-  <ul>
-    <li>
-      <strong>Total Packs Opened:</strong><br>
-      Tap the Medals icon from the main menu and locate the medal labeled “Packs Opened.” This number represents your total packs opened.
-    </li>
-    <li>
-      <strong>Shining Revelry Packs Opened:</strong><br>
-      Tap the Shining Revelry Pack and note your pack points. Divide this number by 5 to get your total packs opened for Shining Revelry.<br>
-      <em>Note:</em> If you have used pack points for Shining Revelry, this count may not be accurate – instead, determine the total cards collected in Shining Revelry and then divide that number by 5.
-    </li>
-  </ul>
-</details>
+    <!-- How to Get Your Inputs Section -->
+    <details>
+      <summary>How to Get Your Inputs</summary>
+      <p><strong>How to Record Your Data:</strong></p>
+      <ul>
+        <li>
+          <strong>Total Packs Opened:</strong><br>
+          Tap the Medals icon from the main menu and locate the medal labeled “Packs Opened.” This number represents your total packs opened.
+        </li>
+        <li>
+          <strong>Shining Revelry Packs Opened:</strong><br>
+          Tap the Shining Revelry Pack and note your pack points. Divide this number by 5 to get your total packs opened for Shining Revelry.<br>
+          <em>Note:</em> If you have used pack points for Shining Revelry, this count may not be accurate – instead, determine the total cards collected in Shining Revelry and then divide that number by 5.
+        </li>
+      </ul>
+    </details>
   </div>
 
   <script>
@@ -1015,6 +1011,26 @@
         }, (fallDuration + 3) * 1000);
       }
     }
+    
+    // --- New Code: Replace rarity icons with official images ---
+    const officialRarityIconURLs = {
+      "Crown Rares": "https://archives.bulbagarden.net/mediawiki/images/9/9a/PTCGP_Crown_Rare_Icon.png",
+      "Triple Stars": "https://archives.bulbagarden.net/mediawiki/images/7/70/PTCGP_Triple_Star_Icon.png",
+      "Double Stars": "https://archives.bulbagarden.net/mediawiki/images/d/d3/PTCGP_Double_Star_Icon.png",
+      "Single Stars": "https://archives.bulbagarden.net/mediawiki/images/4/4a/PTCGP_Single_Star_Icon.png",
+      "Quad Diamonds": "https://archives.bulbagarden.net/mediawiki/images/3/3f/PTCGP_Quad_Diamond_Icon.png",
+      "God Packs": "https://archives.bulbagarden.net/mediawiki/images/e/e8/PTCGP_God_Pack_Icon.png",
+      "Shiny One Star": "https://archives.bulbagarden.net/mediawiki/images/2/2a/PTCGP_Shiny_One_Star_Icon.png",
+      "Shiny Two Star": "https://archives.bulbagarden.net/mediawiki/images/f/fb/PTCGP_Shiny_Two_Star_Icon.png"
+    };
+    
+    document.querySelectorAll('.card label').forEach(label => {
+      const rarityKey = label.getAttribute('data-rarity');
+      if (officialRarityIconURLs[rarityKey]) {
+        const iconSpan = label.querySelector('.rarity-icon');
+        iconSpan.innerHTML = `<img src="${officialRarityIconURLs[rarityKey]}" alt="${rarityKey} Icon" style="max-height:1.5em;">`;
+      }
+    });
   </script>
 </body>
 </html>
