@@ -34,7 +34,7 @@
       position: relative;
     }
     input, button { font-family: 'Press Start 2P', cursive; }
-    .luck-input { font-size: 0.8em; }
+    .luck-input { font-size: 0.8em; width: 60px; }
     @keyframes floatAround {
       0% { transform: translate(0, 0); }
       25% { transform: translate(30px, -20px); }
@@ -131,6 +131,7 @@
       flex-direction: column;
       align-items: center;
     }
+    /* Adjusted animation delays for 8 cards */
     .rarity-grid .card:nth-child(1) { animation-delay: 0.2s; }
     .rarity-grid .card:nth-child(2) { animation-delay: 0.4s; }
     .rarity-grid .card:nth-child(3) { animation-delay: 0.6s; }
@@ -178,14 +179,10 @@
       height: 1em;
       vertical-align: -0.15em;
     }
-    .god-packs-icon {
-      font-size: 2.5em;
-    }
+    /* Reduced god pack icon size */
     .god-packs-icon img {
-      width: 2.5em;
+      width: 1.5em;
       height: auto;
-      vertical-align: -0.15em;
-      max-width: 100%;
     }
     .packs-card {
       background: #FFEBCD;
@@ -241,28 +238,15 @@
       margin-bottom: 10px;
     }
     ul { list-style: none; padding: 0; }
-    @keyframes slamIn {
-      0% { opacity: 0; transform: scale(0.5) translateY(-50px); }
-      60% { opacity: 1; transform: scale(1.1) translateY(10px); }
-      80% { opacity: 1; transform: scale(0.95) translateY(0); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    #luckByRarity li {
-      background: #FFFDE7;
-      margin-bottom: 10px;
-      padding: 10px;
-      border: 2px dashed #FFCA28;
-      border-radius: 8px;
-      font-size: 0.8em;
-      opacity: 0;
-      animation: slamIn 0.8s ease forwards;
-    }
+    /* Updated animation delays for result list items (supporting 8 items) */
     #luckByRarity li:nth-child(1) { animation-delay: 1s; }
     #luckByRarity li:nth-child(2) { animation-delay: 2s; }
     #luckByRarity li:nth-child(3) { animation-delay: 3s; }
     #luckByRarity li:nth-child(4) { animation-delay: 4s; }
     #luckByRarity li:nth-child(5) { animation-delay: 5s; }
     #luckByRarity li:nth-child(6) { animation-delay: 6s; }
+    #luckByRarity li:nth-child(7) { animation-delay: 7s; }
+    #luckByRarity li:nth-child(8) { animation-delay: 8s; }
     .score-number { font-weight: bold; margin: 0 3px; }
     .score-number.green { color: green; }
     .score-number.red { color: red; }
@@ -441,7 +425,7 @@
         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pokéball Icon">
       </div>
       <div class="intro">
-        Enter your card pull numbers and the number of packs opened to discover how lucky your pulls are!
+        Enter your card pull numbers, the number of total packs opened, and the number of Shining Revelry packs opened to discover how lucky your pulls are!
       </div>
     </div>
 
@@ -510,8 +494,13 @@
 
     <!-- Packs Opened -->
     <div class="packs-card section">
-      <label>Packs Opened</label>
+      <label>Total Packs Opened</label>
       <input type="number" id="packsOpened" min="0" class="luck-input" />
+    </div>
+    <!-- New: Shining Revelry Packs Opened -->
+    <div class="packs-card section">
+      <label>Shining Revelry Packs Opened</label>
+      <input type="number" id="shiningPacksOpened" min="0" class="luck-input" />
     </div>
 
     <!-- Toggle Section Container -->
@@ -585,7 +574,7 @@
 
   <script>
     // Retrieve and save inputs
-    const inputIds = ['crCards', '3sCards', '2sCards', '1sCards', '4dCards', 'rareCards', 'shiny1Cards', 'shiny2Cards', 'packsOpened'];
+    const inputIds = ['crCards', '3sCards', '2sCards', '1sCards', '4dCards', 'rareCards', 'shiny1Cards', 'shiny2Cards', 'packsOpened', 'shiningPacksOpened'];
     inputIds.forEach(id => {
       const saved = localStorage.getItem(id);
       if (saved !== null) {
@@ -599,7 +588,7 @@
         if (packs > 0) {
           const maxPossible = packs * 5;
           const totalCards = Array.from(inputs)
-            .filter(inp => inp.id !== 'packsOpened')
+            .filter(inp => inp.id !== 'packsOpened' && inp.id !== 'shiningPacksOpened')
             .reduce((sum, inp) => sum + (parseInt(inp.value) || 0), 0);
           if (totalCards > maxPossible) {
             document.getElementById('errorHandling').innerHTML =
@@ -851,8 +840,9 @@
     
     function calculateAllLuck() {
       const packsOpened = parseInt(document.getElementById('packsOpened').value) || 0;
+      const shiningPacksOpened = parseInt(document.getElementById('shiningPacksOpened').value) || 0;
       if (packsOpened <= 0) {
-        document.getElementById('errorHandling').innerHTML = 'Please enter a valid number of opened packs.';
+        document.getElementById('errorHandling').innerHTML = 'Please enter a valid number of total packs opened.';
         return;
       }
       const totalCardsPulled =
@@ -876,6 +866,8 @@
     }
     
     function calculateScore() {
+      const packsOpened = parseInt(document.getElementById('packsOpened').value);
+      const shiningPacksOpened = parseInt(document.getElementById('shiningPacksOpened').value) || 0;
       const pulls = {
         "👑 Crown Rares": parseInt(document.getElementById('crCards').value) || 0,
         "⭐⭐⭐ Triple Star": parseInt(document.getElementById('3sCards').value) || 0,
@@ -898,12 +890,14 @@
       };
       let resultsHTML = "<ul>";
       let totalLuck = 0;
-      const packsOpened = parseInt(document.getElementById('packsOpened').value);
       const spawnedRarities = {};
       const includeRare = document.getElementById('toggleRare').checked;
       for (let rarity in pulls) {
+        // Use shiningPacksOpened for shiny rarities; otherwise use packsOpened
+        let expected = (rarity === "✨ Shiny One Star" || rarity === "💫 Shiny Two Star")
+                         ? pullRates[rarity] * shiningPacksOpened
+                         : pullRates[rarity] * packsOpened;
         let actual = pulls[rarity];
-        let expected = pullRates[rarity] * packsOpened;
         let luckDisplay = "";
         let desc = "";
         let contribution = 0;
