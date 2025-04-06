@@ -8,7 +8,7 @@
   <!-- Using Press Start 2P for a retro, Pokémon-inspired vibe -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
-    /* Background decal */
+    /* Background decal: subtle repeating Pokéball pattern */
     .bg-decal {
       position: fixed;
       top: 0;
@@ -35,16 +35,14 @@
     }
     input, button { font-family: 'Press Start 2P', cursive; }
     .luck-input { font-size: 0.8em; width: 60px; }
-    /* Updated rarity icons: use inline-flex with increased padding and border */
+    /* Ensure all rarity icons are uniform and stand out */
     .rarity-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 1.8em;
-      padding: 0.3em;
+      display: inline-block;
+      min-width: 1.5em;
+      text-align: center;
       margin-right: 0.5em;
-      background: rgba(255,255,255,0.9);
-      border: 1px solid #ccc;
+      background: rgba(255,255,255,0.8);
+      padding: 0.2em;
       border-radius: 5px;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     }
@@ -55,7 +53,6 @@
       75% { transform: translate(10px, -10px); }
       100% { transform: translate(0, 0); }
     }
-    /* Floating Pokémon (default positions) */
     .floating-pokemon {
       position: fixed;
       z-index: 10000;
@@ -66,7 +63,6 @@
     .floating-pokemon.bottom-right { bottom: 10px; right: 10px; width: 60px; }
     .floating-pokemon.bottom-left { bottom: 10px; left: 10px; width: 60px; }
     .floating-pokemon img { width: 100%; height: auto; }
-    /* Container styling */
     .container {
       width: 100%;
       max-width: 600px;
@@ -170,9 +166,8 @@
       outline: none;
       transform: scale(1.1);
     }
-    /* Increase God Pack icon size */
     .god-packs-icon img {
-      width: 2em;
+      width: 2em; /* Increased from 1.5em */
       height: auto;
     }
     .packs-card {
@@ -352,66 +347,18 @@
       margin-top: 5px;
       text-align: left;
     }
-    /* Updated toggle (switch) styling to look more like a modern slider */
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 24px;
-    }
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .switch span {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: .4s;
-      border-radius: 24px;
-    }
-    .switch span:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
-    .switch input:checked + span {
-      background-color: #D32F2F;
-    }
-    .switch input:checked + span:before {
-      transform: translateX(26px);
-    }
     @media (max-width: 600px) {
       .container { width: 100%; padding: 10px; }
       .page-title { font-size: 1.5em; }
       .title-container img { width: 80px; }
       .luck-input { font-size: 0.7em; }
     }
-    /* New keyframes for animated sprites (floatSprite) */
-    @keyframes floatSprite {
-      0% { opacity: 0; transform: translate(0, 0) scale(1.2) rotate(15deg); }
-      10% { opacity: 1; transform: translate(0, 0) scale(1.2) rotate(15deg); }
-      50% { opacity: 1; transform: translate(20px, -20px) scale(1.2) rotate(15deg); }
-      90% { opacity: 1; transform: translate(0, 0) scale(1.2) rotate(15deg); }
-      100% { opacity: 0; transform: translate(0, 0) scale(0.5) rotate(-15deg); }
-    }
   </style>
 </head>
 <body>
   <!-- Background decal -->
   <div class="bg-decal"></div>
-  <!-- Floating Pokémon decorations (sprites now animate with floatSprite) -->
+  <!-- Floating Pokémon decorations (sprites now appear at 40px width) -->
   <div class="floating-pokemon top-left">
     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pikachu">
   </div>
@@ -512,7 +459,7 @@
       <input type="number" id="shiningPacksOpened" min="0" class="luck-input" />
     </div>
 
-    <!-- Toggle Section Container -->
+    <!-- Toggle Section Container (using original switch markup) -->
     <div class="toggle-section-container">
       <div class="toggle-container">
         <div class="toggle-info-row">
@@ -525,7 +472,7 @@
         </div>
         <div class="info-popup" id="infoPopup">
           When enabled, God Pack pulls affect your overall score with their full luck factor.
-          When disabled, they are excluded.
+          When disabled, they are excluded from the overall calculation.
         </div>
         <div class="toggle-info-row">
           <label class="switch">
@@ -536,8 +483,8 @@
           <span class="info-icon" id="toggleShinyInfo" tabindex="0">&#9432;</span>
         </div>
         <div class="info-popup" id="toggleShinyPopup">
-          When enabled, Shining Revelry pack pulls (new shiny rarities) affect your overall score with their full luck factor.
-          When disabled, they are excluded.
+          When enabled, Shining Revelry pack pulls (the new shiny rarities) affect your overall score with their full luck factor.
+          When disabled, they are excluded from the overall calculation.
         </div>
       </div>
     </div>
@@ -558,7 +505,7 @@
       </div>
     </div>
 
-    <!-- How It Works Section (updated to reference the toggles) -->
+    <!-- How It Works Section -->
     <details>
       <summary>How It Works</summary>
       <p><strong>Calculation Method:</strong></p>
@@ -581,11 +528,12 @@
         <li>Shiny One Star: 2.857%</li>
         <li>Shiny Two Star: 1.333%</li>
         <li class="toggle-info">
-          <strong>Toggle:</strong> Use the switches above to include/exclude God Pack pulls and Shining Revelry pulls in the score.
+          <strong>Toggle:</strong> The "Include God Packs in Score" and "Include Shining Revelry Packs in Score" switches control whether those pulls are included.
         </li>
       </ul>
       <p>
-        <strong>Note:</strong> For the shiny rarities, expected pulls are based on the number of Shining Revelry packs opened.
+        <strong>Note:</strong> Cards below Quad Diamonds are not tracked individually;
+        they are assumed to be pulled at a 100% rate for every player.
       </p>
     </details>
   </div>
@@ -631,7 +579,7 @@
       });
     }
     
-    // spawnRaritySprite: creates an animated floating sprite using the floatSprite animation
+    // spawnRaritySprite: creates a floating sprite for a given rarity (now at 40px width)
     function spawnRaritySprite(rarity, topSprite = true) {
       if (!raritySprites[rarity]) return;
       const img = document.createElement("img");
@@ -639,8 +587,8 @@
       img.alt = rarity;
       img.style.position = "fixed";
       img.style.width = "40px";
-      // Instead of static transform, apply a combined animation:
-      img.style.animation = "floatSprite 6s ease-in-out forwards";
+      img.style.opacity = 0;
+      img.style.transition = "opacity 1s ease, transform 1s ease";
       img.style.zIndex = topSprite ? "10000" : "0";
       const padding = 50;
       const left = Math.random() * (window.innerWidth - padding * 2) + padding;
@@ -648,9 +596,15 @@
       img.style.left = left + "px";
       img.style.top = top + "px";
       document.body.appendChild(img);
-      // Remove the sprite after animation completes
       setTimeout(() => {
-         if (img.parentNode) img.parentNode.removeChild(img);
+        img.style.opacity = 1;
+        img.style.transform = "scale(1.2) rotate(15deg)";
+      }, 100);
+      img.classList.add("floating-animation");
+      setTimeout(() => {
+        img.style.opacity = 0;
+        img.style.transform = "scale(0.5) rotate(-15deg)";
+        setTimeout(() => { if (img.parentNode) img.parentNode.removeChild(img); }, 1000);
       }, 6000);
     }
     
@@ -671,15 +625,6 @@
       spawnRaritySprite(randomKey, false);
     }
     setInterval(spawnRandomBackgroundPokemon, 2000);
-    
-    /* New keyframes to animate sprites (move + fade) */
-    @keyframes floatSprite {
-      0% { opacity: 0; transform: translate(0, 0) scale(1.2) rotate(15deg); }
-      10% { opacity: 1; transform: translate(0, 0) scale(1.2) rotate(15deg); }
-      50% { opacity: 1; transform: translate(20px, -20px) scale(1.2) rotate(15deg); }
-      90% { opacity: 1; transform: translate(0, 0) scale(1.2) rotate(15deg); }
-      100% { opacity: 0; transform: translate(0, 0) scale(0.5) rotate(-15deg); }
-    }
     
     const rarityDescriptionsOriginal = {
       ">=150": [
@@ -915,6 +860,7 @@
       const includeRare = document.getElementById('toggleRare').checked;
       const includeShiny = document.getElementById('toggleShiny').checked;
       for (let rarity in pulls) {
+        // Use shiningPacksOpened for shiny rarities; otherwise use packsOpened
         let expected = (rarity === "✨ Shiny One Star" || rarity === "💫 Shiny Two Star")
                          ? pullRates[rarity] * shiningPacksOpened
                          : pullRates[rarity] * packsOpened;
@@ -957,6 +903,7 @@
       }
       resultsHTML += "</ul>";
       document.getElementById('luckByRarity').innerHTML = resultsHTML;
+      // Dynamically assign animation delays to each result item
       const resultItems = document.querySelectorAll('#luckByRarity li');
       resultItems.forEach((item, index) => {
          item.style.animationDelay = (index + 1) + "s";
@@ -984,7 +931,7 @@
     
     document.getElementById('submitButton').addEventListener('click', calculateAllLuck);
     
-    // Toggle info popups
+    // Toggle info popups for God Packs and Shining Revelry toggles
     document.getElementById('toggleInfo').addEventListener('click', function(){
       const popup = document.getElementById('infoPopup');
       popup.style.display = (popup.style.display === "block") ? "none" : "block";
